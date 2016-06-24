@@ -1,16 +1,9 @@
 package com.software.bank.view;
 
 public interface IVisual {
+
+	void printMessage(KeyMessage key);
 	
-	void messageContractNumber();
-		
-	void messageWelcome();
+	void printMessage(String message);
 	
-	void messageBye();
-	
-	void showPaymentGrid(String[] list);
-	
-	void messageError();
-	
-	void messageSuccess();
 }

@@ -1,52 +1,34 @@
 package com.software.bank.view;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ResourceBundle;
+
+import org.h2.util.New;
 
 public abstract class VisualAbstract implements IVisual {
 	
-	ResourceBundle resourceBundle;
+	protected ResourceBundle resourceBundle;
 	
-	protected String getProperty(String key) {
-		return resourceBundle.getString(key);
-	}
-
 	@Override
-	public void messageContractNumber() {
-		print(getProperty("msg.contract.number"));
+	public void printMessage(String message) {
+		toConsole(message);
 	}
 	
 	@Override
-	public void messageWelcome() {
-		print(getProperty("msg.welcome"));
+	public void printMessage(KeyMessage key) {
+		toConsole(extractMessage(key));
 	}
 	
-	@Override
-	public void messageBye() {
-		print(getProperty("msg.bye"));
-	}
-	
-	@Override
-	public void showPaymentGrid(String[] list) {
-		if (list != null && list.length > 0) {
-			for (String item : list) {
-				print(item);
-			}
-		} else {
-			print("no payment date");
+	private String extractMessage(KeyMessage key){
+		String message = resourceBundle.getString(key.getKey());
+		try {
+			return new String(message.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return message;
 		}
 	}
-
-	@Override
-	public void messageError() {
-		print(getProperty("msg.error"));
-	}
 	
-	@Override
-	public void messageSuccess() {
-		print(getProperty("msg.success"));
-	}
-
-	private void print(String value) {
-		System.out.println(value);
+	private void toConsole(String message){
+		System.out.println(message);
 	}
 }

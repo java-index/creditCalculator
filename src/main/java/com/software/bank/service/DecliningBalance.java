@@ -1,4 +1,4 @@
-package com.software.bank.domain;
+package com.software.bank.service;
 
 public class DecliningBalance extends CreditAbstract {
 
@@ -9,7 +9,8 @@ public class DecliningBalance extends CreditAbstract {
 	}
 
 	@Override
-	public void addPayment(String contractNumber, long summa_debet) {
-		//dataBase.addPayment(contractNumber, summa_debet);	
+	public long getMinimalPayment(String contractNumber) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
