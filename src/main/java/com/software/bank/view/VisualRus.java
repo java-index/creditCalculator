@@ -1,5 +1,9 @@
 package com.software.bank.view;
 
-public class VisualRus extends VisualAbstract {
+import java.util.ResourceBundle;
 
+public class VisualRus extends VisualAbstract {
+	static {
+		resourceBundle = ResourceBundle.getBundle("messages_rus");	
+	}
 }

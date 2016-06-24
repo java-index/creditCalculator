@@ -1,5 +1,9 @@
 package com.software.bank.view;
 
-public class VisualUkr extends VisualAbstract {
+import java.util.ResourceBundle;
 
+public class VisualUkr extends VisualAbstract {
+	static {
+		resourceBundle = ResourceBundle.getBundle("messages_eng");	
+	}
 }

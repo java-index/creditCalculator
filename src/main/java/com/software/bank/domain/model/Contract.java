@@ -1,14 +1,14 @@
 package com.software.bank.domain.model;
 
-import java.math.BigDecimal;
-
 public class Contract {
 	
 	private String contartNumber;
 	
-	private int time;
+	private int term;
 	
-	private BigDecimal summa;
+	private long credit;
+	
+	private long debet;
 
 	public String getContartNumber() {
 		return contartNumber;
@@ -18,19 +18,27 @@ public class Contract {
 		this.contartNumber = contartNumber;
 	}
 
-	public int getTime() {
-		return time;
+	public int getTerm() {
+		return term;
 	}
 
-	public void setTime(int time) {
-		this.time = time;
+	public void setTerm(int term) {
+		this.term = term;
 	}
 
-	public BigDecimal getSumma() {
-		return summa;
+	public long getCredit() {
+		return credit;
 	}
 
-	public void setSumma(BigDecimal summa) {
-		this.summa = summa;
+	public void setCredit(long credit) {
+		this.credit = credit;
+	}
+
+	public long getDebet() {
+		return debet;
+	}
+
+	public void setDebet(long debet) {
+		this.debet = debet;
 	}
 }

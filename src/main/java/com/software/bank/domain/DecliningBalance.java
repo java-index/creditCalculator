@@ -1,15 +1,11 @@
 package com.software.bank.domain;
 
-public class DecliningBalance implements IKreditLogic {
+public class DecliningBalance extends CreditAbstract {
 
-	public void addCredit(int time, String contactNumber) {
+	@Override
+	public String[] getPaymentGrid(String contactNumber) {
 		// TODO Auto-generated method stub
-		
-	}
-
-	public void getDebet(String contactNumber) {
-		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 }

@@ -1,5 +1,9 @@
 package com.software.bank.view;
 
-public class VisualEng extends VisualAbstract {
+import java.util.ResourceBundle;
 
+public class VisualEng extends VisualAbstract {
+	static {
+		resourceBundle = ResourceBundle.getBundle("messages_eng");	
+	}
 }
