@@ -1,30 +1,24 @@
 package com.software.bank;
 
-import com.software.bank.dao.IDataBase;
-import com.software.bank.dao.exception.DaoException;
-import com.software.bank.dao.h2.CreditDataBaseDao;
+import com.software.bank.domain.Annuity;
+import com.software.bank.domain.ICreditLogic;
 
 public class Launcher {
-	
-	public static void main(String[] args)  {
-	
-		IDataBase dataBase = new CreditDataBaseDao();
-		try {
-			dataBase.addCredit("1", 100, 12, 2.5);
-			long debet = dataBase.getDebet("1");
-			long credit = dataBase.getCredit("1");
-			System.out.println("Credit = " + credit);
-			System.out.println("Debet = " + debet);
-			dataBase.addPayment("1", 55);
-			dataBase.addPayment("1", 55);
-			debet = dataBase.getDebet("1");
-			System.out.println("Debet = " + debet);
-			double rate = dataBase.getRate("1");
-			System.err.println(rate);
-			System.out.println(dataBase.getTerm("1"));
-		} catch (DaoException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+
+	public static void main(String[] args) {
+		ICreditLogic creditLogic = new Annuity();
+		ICreditLogic.visual.messageWelcome();
+		String menuItem = ICreditLogic.input.read();
+		if (menuItem.equals("1")) {
+			System.err.println("add credit");
+		} else if (menuItem.equals("2")) {
+			System.out.println("add payment");
+		} else if (menuItem.equals("3")) {
+			System.out.println("minimal payment");
+		} else if (menuItem.equals("4")) {
+			System.out.println("grid payment");
+		} else {
+			ICreditLogic.visual.messageBye();
 		}
 	}
 }

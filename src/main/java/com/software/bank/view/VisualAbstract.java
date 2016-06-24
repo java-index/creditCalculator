@@ -4,19 +4,25 @@ import java.util.ResourceBundle;
 
 public abstract class VisualAbstract implements IVisual {
 	
-	static ResourceBundle resourceBundle;
+	ResourceBundle resourceBundle;
 	
 	protected String getProperty(String key) {
 		return resourceBundle.getString(key);
 	}
 
 	@Override
-	public void mesasageContractNumber() {
+	public void messageContractNumber() {
+		print(getProperty("msg.contract.number"));
 	}
 	
 	@Override
 	public void messageWelcome() {
-		
+		print(getProperty("msg.welcome"));
+	}
+	
+	@Override
+	public void messageBye() {
+		print(getProperty("msg.bye"));
 	}
 	
 	@Override
@@ -32,12 +38,15 @@ public abstract class VisualAbstract implements IVisual {
 
 	@Override
 	public void messageError() {
-		print("Error");
+		print(getProperty("msg.error"));
+	}
+	
+	@Override
+	public void messageSuccess() {
+		print(getProperty("msg.success"));
 	}
 
 	private void print(String value) {
 		System.out.println(value);
 	}
-	
-
 }

@@ -8,4 +8,8 @@ public class DecliningBalance extends CreditAbstract {
 		return null;
 	}
 
+	@Override
+	public void addPayment(String contractNumber, long summa_debet) {
+		//dataBase.addPayment(contractNumber, summa_debet);	
+	}
 }

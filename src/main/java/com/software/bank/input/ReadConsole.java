@@ -2,7 +2,7 @@ package com.software.bank.input;
 
 import java.util.Scanner;
 
-public class ReadConsole implements IInput {
+public class ReadConsole implements IDataInput {
 	
 	@Override
 	public String read() {
