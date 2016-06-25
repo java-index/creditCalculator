@@ -1,13 +1,15 @@
-package com.software.bank.controller.operation;
+package com.software.bank.controller.command.language;
 
 import com.software.bank.controller.ActionCommand;
+import com.software.bank.controller.CreditController;
 import com.software.bank.service.ICreditLogic;
 import com.software.bank.service.exception.ServiceException;
+import com.software.bank.view.VisualEng;
 
-public class AddPayment implements ActionCommand {
+public class ViewEnCommand implements ActionCommand {
 
 	@Override
 	public void execute(ICreditLogic creditLogic) throws ServiceException {
-		System.out.println("ADD PAYMENT");
+		CreditController.view = new VisualEng();
 	}
 }

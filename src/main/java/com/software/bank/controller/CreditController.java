@@ -2,74 +2,41 @@ package com.software.bank.controller;
 
 import com.software.bank.controller.input.IDataInput;
 import com.software.bank.controller.input.ReadConsole;
+import com.software.bank.service.DecliningBalance;
 import com.software.bank.service.ICreditLogic;
 import com.software.bank.service.exception.ServiceException;
 import com.software.bank.view.IVisual;
 import com.software.bank.view.KeyMessage;
 import com.software.bank.view.VisualEng;
-import com.software.bank.view.VisualRus;
-import com.software.bank.view.VisualUkr;
 
 public class CreditController {
+	
+	public static IVisual view = new VisualEng();;
+	public static IDataInput input = new ReadConsole();;
+	
+	private ICreditLogic creditLogic = new DecliningBalance();
+	
+	public ICreditLogic getCreditLogic() {
+		return creditLogic;
+	}
 
-	private IVisual view = new VisualEng();
-	private IDataInput input = new ReadConsole();
-	private ICreditLogic creditLogic;
-
+	public void setCreditLogic(ICreditLogic creditLogic) {
+		this.creditLogic = creditLogic;
+	}
+	
 	public void start() {
-		selectLanguage();
-		doCreditOperation();
+		showMenu(KeyMessage.SELECT_LANGUAGE, 0);
+		showMenu(KeyMessage.SELECT_OPERATION, 1);
 	}
 
-	// 1-EN 2-UA 3-RU
-	private void selectLanguage() {
-		print(KeyMessage.SELECT_LANGUAGE);
-		while (true) {
-			String choice = input.read();
-			if ("1".equals(choice)) {
-				break;
-			} else if ("2".equals(choice)) {
-				view = new VisualUkr();
-				break;
-			} else if ("3".equals(choice)) {
-				view = new VisualRus();
-				break;
-			} else {
-				print(KeyMessage.INPUT_PARAMETR_ERROR);
-				continue;
-			}
-		}
-	}
-
-	private void doCreditOperation() {
-		print(KeyMessage.SELECT_OPERATION);
+	private void showMenu(KeyMessage key, int idMenu) {
+		view.printMessage(key);;
 		String userChoice = input.read();
-		ActionCommand command = ActionFactory.defineCommand(userChoice);
+		ActionCommand command = ActionFactory.defineCommand(userChoice + idMenu);
 		try {
 			command.execute(creditLogic);
 		} catch (ServiceException e) {
-			print(KeyMessage.INTERNAL_ERROR);
+			view.printMessage(KeyMessage.INTERNAL_ERROR);
 		}
 	}
-
-	private void selectTypeCredit() {
-		print(KeyMessage.SELECT_LANGUAGE);
-		String choice = input.read();
-		if ("1".equals(choice)) {
-		
-		} else if ("2".equals(choice)) {
-		
-		} else {
-			exit();
-		}
-	}
-
-	private void print(KeyMessage key) {
-		view.printMessage(key);
-	}
-
-	private void exit(){
-		print(KeyMessage.BYE);
-		System.exit(0);
-	}
-	}
+}

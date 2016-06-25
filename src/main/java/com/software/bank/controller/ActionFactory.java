@@ -8,16 +8,27 @@ public class ActionFactory {
 		ActionCommand currentAction = currentCommand.getCurrentCommand();
 		return currentAction;
 	}
-
+	
+	/**
+	 *  Convert users input to command  
+	 */
 	private static String createCommand(String userChoice) {
 		switch (userChoice) {
-		case "1":
+		// select language, menu id = 0
+		case "10":
+			return "SET_LANGUAGE_EN";
+		case "20":
+			return "SET_LANGUAGE_UA";
+		case "30":
+			return "SET_LANGUAGE_RU";
+		// select credit operation, menu id = 1	
+		case "11":
 			return "ADD_CREDIT";
-		case "2":
+		case "21":
 			return "ADD_PAYMENT";
-		case "3":
+		case "31":
 			return "MIN_PAYMENT";
-		case "4":
+		case "41":
 			return "PAYMENT_GRID";
 		default:
 			return "EXIT";

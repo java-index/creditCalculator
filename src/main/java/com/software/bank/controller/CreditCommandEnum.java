@@ -1,40 +1,61 @@
 package com.software.bank.controller;
 
-import com.software.bank.controller.operation.AddCredit;
-import com.software.bank.controller.operation.AddPayment;
-import com.software.bank.controller.operation.Exit;
-import com.software.bank.controller.operation.MinPayment;
-import com.software.bank.controller.operation.PaymentGrid;
+import com.software.bank.controller.command.AddCreditCommand;
+import com.software.bank.controller.command.AddPaymentCommand;
+import com.software.bank.controller.command.ExitCommand;
+import com.software.bank.controller.command.MinPaymentCommand;
+import com.software.bank.controller.command.PaymentGridCommand;
+import com.software.bank.controller.command.language.ViewEnCommand;
+import com.software.bank.controller.command.language.ViewRuCommand;
+import com.software.bank.controller.command.language.ViewUaCommand;
 
 public enum CreditCommandEnum {
 
+	SET_LANGUAGE_EN {
+		{
+			this.command = new ViewEnCommand();
+		}
+	},
+	
+	SET_LANGUAGE_UA {
+		{
+			this.command = new ViewUaCommand();
+		}
+	},
+	
+	SET_LANGUAGE_RU {
+		{
+			this.command = new ViewRuCommand();
+		}
+	},
+	
 	ADD_CREDIT {
 		{
-			this.command = new AddCredit();
+			this.command = new AddCreditCommand();
 		}
 	},
 
 	ADD_PAYMENT {
 		{
-			this.command = new AddPayment();
+			this.command = new AddPaymentCommand();
 		}
 	},
 	
 	MIN_PAYMENT {
 		{
-			this.command = new MinPayment();
+			this.command = new MinPaymentCommand();
 		}
 	},
 	
 	PAYMENT_GRID {
 		{
-			this.command = new PaymentGrid();
+			this.command = new PaymentGridCommand();
 		}
 	},
 
 	EXIT {
 		{
-			this.command = new Exit();
+			this.command = new ExitCommand();
 		}
 	};
 
