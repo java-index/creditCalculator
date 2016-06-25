@@ -22,7 +22,7 @@ public enum KeyMessage {
 	
 	INPUT_PARAMETR_ERROR("msg.input.error"),
 	
-	DAO_ERROR("msg.dao.error");
+	INTERNAL_ERROR("msg.internal.error");
 	
 	private String key;
 

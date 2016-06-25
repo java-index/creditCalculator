@@ -3,6 +3,7 @@ package com.software.bank.controller;
 import com.software.bank.controller.input.IDataInput;
 import com.software.bank.controller.input.ReadConsole;
 import com.software.bank.service.ICreditLogic;
+import com.software.bank.service.exception.ServiceException;
 import com.software.bank.view.IVisual;
 import com.software.bank.view.KeyMessage;
 import com.software.bank.view.VisualEng;
@@ -17,7 +18,7 @@ public class CreditController {
 
 	public void start() {
 		selectLanguage();
-		selectOperation();
+		doCreditOperation();
 	}
 
 	// 1-EN 2-UA 3-RU
@@ -40,19 +41,14 @@ public class CreditController {
 		}
 	}
 
-	private void selectOperation() {
+	private void doCreditOperation() {
 		print(KeyMessage.SELECT_OPERATION);
-		String choice = input.read();
-		if ("1".equals(choice)) {
-			
-		} else if ("2".equals(choice)) {
-
-		} else if ("3".equals(choice)) {
-
-		} else if ("4".equals(choice)) {
-
-		} else {
-			exit();
+		String userChoice = input.read();
+		ActionCommand command = ActionFactory.defineCommand(userChoice);
+		try {
+			command.execute(creditLogic);
+		} catch (ServiceException e) {
+			print(KeyMessage.INTERNAL_ERROR);
 		}
 	}
 
