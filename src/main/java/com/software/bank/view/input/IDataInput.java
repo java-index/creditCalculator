@@ -1,4 +1,4 @@
-package com.software.bank.controller.input;
+package com.software.bank.view.input;
 
 public interface IDataInput {
 

@@ -1,10 +1,12 @@
 package com.software.bank.service;
 
+import com.software.bank.service.exception.ServiceException;
+import com.software.bank.service.model.Debit;
+
 public class DecliningBalance extends CreditAbstract {
 
 	@Override
-	public long getMinimalPayment(String contractNumber) {
-		// TODO Auto-generated method stub
-		return 0;
+	public void addPayment(Debit debit) throws ServiceException {
+		
 	}
 }

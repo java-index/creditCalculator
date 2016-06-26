@@ -1,4 +1,4 @@
-package com.software.bank.controller.input;
+package com.software.bank.view.input;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;

@@ -5,6 +5,6 @@ import com.software.bank.service.exception.ServiceException;
 
 public interface ActionCommand {
 	
-	void execute(ICreditLogic creditLogic) throws ServiceException;
+	void execute() throws ServiceException;
 	
 }

@@ -9,7 +9,7 @@ import com.software.bank.view.VisualRus;
 public class ViewRuCommand implements ActionCommand {
 
 	@Override
-	public void execute(ICreditLogic creditLogic) throws ServiceException {
+	public void execute() throws ServiceException {
 		CreditController.view = new VisualRus();
 	}
 }

@@ -10,5 +10,4 @@ public interface IDataBase {
 	void addPayment(String contractNumber, double summa) throws DaoException;
 	
 	Credit getCredit(String contractNumber) throws DaoException; 
-
 }

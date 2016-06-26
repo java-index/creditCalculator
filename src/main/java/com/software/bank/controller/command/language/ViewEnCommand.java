@@ -9,7 +9,7 @@ import com.software.bank.view.VisualEng;
 public class ViewEnCommand implements ActionCommand {
 
 	@Override
-	public void execute(ICreditLogic creditLogic) throws ServiceException {
+	public void execute() throws ServiceException {
 		CreditController.view = new VisualEng();
 	}
 }

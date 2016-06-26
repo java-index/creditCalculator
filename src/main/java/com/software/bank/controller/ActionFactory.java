@@ -14,17 +14,17 @@ public class ActionFactory {
 	 */
 	private static String createCommand(String userChoice) {
 		switch (userChoice) {
-		// select language, menu id = 0
-		case "10":
+		// select language, menu id = _lang
+		case "1_lang":
 			return "SET_LANGUAGE_EN";
-		case "20":
+		case "2_lang":
 			return "SET_LANGUAGE_UA";
-		case "30":
+		case "3_lang":
 			return "SET_LANGUAGE_RU";
-		// select credit operation, menu id = 1	
-		case "11":
+		// select credit operation, menu id = _oper	
+		case "1_oper":
 			return "ADD_CREDIT";
-		case "21":
+		case "2_oper":
 			return "ADD_PAYMENT";
 		default:
 			return "EXIT";

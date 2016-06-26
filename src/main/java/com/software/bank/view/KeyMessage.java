@@ -26,7 +26,9 @@ public enum KeyMessage {
 	
 	INPUT_PARAMETR_ERROR("msg.input.error"),
 	
-	INTERNAL_ERROR("msg.internal.error");
+	INTERNAL_ERROR("msg.internal.error"),
+	
+	CONTRACT_NOT_FOUND("msg.contract.notfound");
 	
 	private String key;
 

@@ -9,7 +9,7 @@ import com.software.bank.view.VisualUkr;
 public class ViewUaCommand implements ActionCommand {
 
 	@Override
-	public void execute(ICreditLogic creditLogic) throws ServiceException {
+	public void execute() throws ServiceException {
 		CreditController.view = new VisualUkr();
 	}
 }
