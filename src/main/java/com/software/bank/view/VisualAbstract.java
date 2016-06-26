@@ -28,6 +28,11 @@ public abstract class VisualAbstract implements IVisual {
 		}
 	}
 	
+//	private String extractMessage(KeyMessage key){
+//		String message = resourceBundle.getString(key.getKey());
+//		return message;
+//	}
+	
 	private void toConsole(String message){
 		System.out.println(message);
 	}

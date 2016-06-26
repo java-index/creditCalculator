@@ -4,16 +4,17 @@ import com.software.bank.dao.IDataBase;
 import com.software.bank.dao.exception.DaoException;
 import com.software.bank.dao.h2.CreditDataBaseDao;
 import com.software.bank.service.exception.ServiceException;
+import com.software.bank.service.model.Credit;
 
 public abstract class CreditAbstract implements ICreditLogic {
 	
-	private IDataBase dataBase = new CreditDataBaseDao();
+	public static IDataBase dataBase = new CreditDataBaseDao();
 
 	@Override
-	public void addCredit(String contractNumber, double summaCredit, int term, double rate) throws ServiceException {
-		long summaCreditCent = Math.round(summaCredit * centFactor());
+	public void addCredit(Credit credit) throws ServiceException {
+		//long summaCreditCent = Math.round(credit.getSummaCredit() * centFactor());
 		try {
-			dataBase.addCredit(contractNumber, summaCreditCent, term, rate);
+			dataBase.addCredit(credit);
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
@@ -29,7 +30,10 @@ public abstract class CreditAbstract implements ICreditLogic {
 		}
 	}
 	
-	private int centFactor(){
-		return 100;
+	/**
+	 * @return amount of cents in the currency unit 
+	 */
+	public int centFactor(){
+		return 100; 
 	}
 }

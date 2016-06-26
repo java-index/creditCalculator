@@ -26,10 +26,6 @@ public class ActionFactory {
 			return "ADD_CREDIT";
 		case "21":
 			return "ADD_PAYMENT";
-		case "31":
-			return "MIN_PAYMENT";
-		case "41":
-			return "PAYMENT_GRID";
 		default:
 			return "EXIT";
 		}

@@ -1,14 +1,13 @@
 package com.software.bank.service;
 
 import com.software.bank.service.exception.ServiceException;
+import com.software.bank.service.model.Credit;
 
 public interface ICreditLogic {
 	
-	void addCredit(String contractNumber, double summa_credit, int term, double rate) throws ServiceException;
+	void addCredit(Credit credit) throws ServiceException;
 	
 	void addPayment(String contractNumber, double summa_debet) throws ServiceException;
 	
-	long getMinimalPayment(String contractNumber);
-	
-	String [] getPaymentGrid(String contractNumber);
+	long getMinimalPayment(String contractNumber) throws ServiceException;
 }

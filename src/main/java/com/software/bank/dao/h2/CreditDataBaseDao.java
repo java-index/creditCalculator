@@ -6,14 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.software.bank.controller.CreditController;
 import com.software.bank.dao.ConnectionFactory;
 import com.software.bank.dao.IDataBase;
 import com.software.bank.dao.exception.DaoException;
+import com.software.bank.service.RepaymentTypeEnum;
+import com.software.bank.service.model.Credit;
+import com.software.bank.view.KeyMessage;
 
 public class CreditDataBaseDao implements IDataBase {
 
 	private static final String CREATE_QUERY = 
-			"CREATE TABLE credit (contract_number VARCHAR(60), summa_credit BIGINT, summa_debet BIGINT, term INT, rate DOUBLE)";
+			"CREATE TABLE credit (contract_number VARCHAR(60), "
+			+ "summa_credit DOUBLE, summa_debet DOUBLE, term INT, rate DOUBLE, repayment VARCHAR(20))";
 
 	// Create table
 	static {
@@ -22,22 +27,23 @@ public class CreditDataBaseDao implements IDataBase {
 			Statement statement = connection.createStatement();
 			statement.execute(CREATE_QUERY);
 		} catch (SQLException e) {
-			System.err.println("can not create table CREDIT");
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void addCredit(String contractNumber, long summa_credit, int term, double rate) throws DaoException {
-		final String querySql = "INSERT INTO credit (contract_number, summa_credit, summa_debet, term, rate) VALUES (?, ?, ?, ?, ?)";
-
+	public void addCredit(Credit credit) throws DaoException {
+		final String querySql = "INSERT INTO credit (contract_number, summa_credit, summa_debet, term, rate, repayment) "
+				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setString(1, contractNumber);
-				statement.setLong(2, summa_credit);
-				statement.setLong(3, 0);
-				statement.setInt(4, term);
-				statement.setDouble(5, rate);
+				statement.setString(1, credit.getContractNumber());
+				statement.setDouble(2, credit.getSummaCredit());
+				statement.setDouble(3, credit.getSummaDebet());
+				statement.setInt(4, credit.getTerm());
+				statement.setDouble(5, credit.getRate());
+				statement.setString(6, credit.getRepayment().toString());
 				statement.executeUpdate();
 			} 
 		} catch (SQLException e){
@@ -46,12 +52,12 @@ public class CreditDataBaseDao implements IDataBase {
 	}
 
 	@Override
-	public void addPayment(String contractNumber, long summa_debet) throws DaoException {
+	public void addPayment(String contractNumber, double summa_debet) throws DaoException {
 		final String querySql = "UPDATE credit SET summa_debet = summa_debet + ? WHERE contract_number = ?";
 
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setLong(1, summa_debet);
+				statement.setDouble(1, summa_debet);
 				statement.setString(2, contractNumber);
 				statement.executeUpdate();
 			} 
@@ -61,36 +67,20 @@ public class CreditDataBaseDao implements IDataBase {
 	}
 
 	@Override
-	public long getDebet(String contractNumber) throws DaoException {
-		final String querySql = "SELECT summa_debet FROM credit WHERE contract_number = ?";
-		long debet = -1;
-
+	public Credit getCredit(String contractNumber) throws DaoException {
+		final String querySql = "SELECT * FROM credit WHERE contract_number = ?";
+		Credit credit = new Credit();
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
 				statement.setString(1,contractNumber);
 				ResultSet rs = statement.executeQuery();
 				while(rs.next()){
-					debet = rs.getLong(1);
-				}
-				rs.close();
-			} 
-		} catch (SQLException e){
-			throw new DaoException(e);
-		} 
-		return debet;
-	}
-
-	@Override
-	public long getCredit(String contractNumber) throws DaoException {
-		final String querySql = "SELECT summa_credit FROM credit WHERE contract_number = ?";
-		long credit = -1;
-
-		try(Connection connection = ConnectionFactory.getConnection()) {								
-			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setString(1,contractNumber);
-				ResultSet rs = statement.executeQuery();
-				while(rs.next()){
-					credit = rs.getLong(1);
+					credit.setContractNumber(rs.getString("contract_number"));
+					credit.setSummaCredit(rs.getDouble("summa_credit"));
+					credit.setSummaDebet(rs.getDouble("summa_debet"));
+					credit.setTerm(rs.getInt("term"));
+					credit.setRate(rs.getDouble("rate"));
+					credit.setRepayment(RepaymentTypeEnum.valueOf(rs.getString("repayment")));
 				}
 				rs.close();
 			} 
@@ -98,45 +88,5 @@ public class CreditDataBaseDao implements IDataBase {
 			throw new DaoException(e);
 		} 
 		return credit;
-	}
-
-	@Override
-	public int getTerm(String contractNumber) throws DaoException {
-		final String querySql = "SELECT term FROM credit WHERE contract_number = ?";
-		int term = -1;
-
-		try(Connection connection = ConnectionFactory.getConnection()) {								
-			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setString(1,contractNumber);
-				ResultSet rs = statement.executeQuery();
-				while(rs.next()){
-					term = rs.getInt(1);
-				}
-				rs.close();
-			} 
-		} catch (SQLException e){
-			throw new DaoException(e);
-		} 
-		return term;
-	}
-
-	@Override
-	public double getRate(String contractNumber) throws DaoException {
-		final String querySql = "SELECT rate FROM credit WHERE contract_number = ?";
-		double rate = -1;
-
-		try(Connection connection = ConnectionFactory.getConnection()) {								
-			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setString(1,contractNumber);
-				ResultSet rs = statement.executeQuery();
-				while(rs.next()){
-					rate = rs.getDouble(1);
-				}
-				rs.close();
-			} 
-		} catch (SQLException e){
-			throw new DaoException(e);
-		} 
-		return rate;
 	}
 }

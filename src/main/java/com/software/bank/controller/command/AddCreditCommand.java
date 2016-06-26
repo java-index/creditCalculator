@@ -5,7 +5,9 @@ import java.util.NoSuchElementException;
 import com.software.bank.controller.ActionCommand;
 import com.software.bank.controller.CreditController;
 import com.software.bank.service.ICreditLogic;
+import com.software.bank.service.RepaymentTypeEnum;
 import com.software.bank.service.exception.ServiceException;
+import com.software.bank.service.model.Credit;
 import com.software.bank.view.KeyMessage;
 
 public class AddCreditCommand implements ActionCommand {
@@ -13,23 +15,25 @@ public class AddCreditCommand implements ActionCommand {
 	@Override
 	public void execute(ICreditLogic creditLogic) throws ServiceException {
 		
+		Credit credit = new Credit();
+		
 		CreditController.view.printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
-		String contractNumber = CreditController.input.read();
+		credit.setContractNumber(CreditController.input.read());
 		
 		CreditController.view.printMessage(KeyMessage.ENTER_CREDIT);
-		double summaCredit = readDouble();
+		credit.setSummaCredit(readDouble());
 		
 		CreditController.view.printMessage(KeyMessage.ENTER_RATE);
-		double rate = readDouble();
+		credit.setRate(readDouble());
 		
 		CreditController.view.printMessage(KeyMessage.ENTER_TERM);
-		int term = readInt();
+		credit.setTerm(readInt());
 		
 		CreditController.view.printMessage(KeyMessage.SELECT_REPAYMENT);
-		String repaymentMethod = CreditController.input.read();
+		int repayment = readInt();
+		credit.setRepayment(RepaymentTypeEnum.values()[repayment]);
 		
-		creditLogic.addCredit(contractNumber, summaCredit, term, rate);
-		String [] grid = creditLogic.getPaymentGrid(contractNumber);
+		creditLogic.addCredit(credit);
 	}
 	
 	private double readDouble(){
