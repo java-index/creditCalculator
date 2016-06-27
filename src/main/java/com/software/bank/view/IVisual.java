@@ -1,11 +1,14 @@
 package com.software.bank.view;
 
+import java.math.BigDecimal;
+
 import com.software.bank.service.model.Credit;
-import com.software.bank.service.model.Debit;
 
 public interface IVisual {
 
 	void printMessage(KeyMessage key);
+	
+	void printMessage(String mesage);
 	
 	String languageChoiceMenuView();
 
@@ -13,7 +16,9 @@ public interface IVisual {
 	
 	Credit addCreditMenuView(); 
 		
-	Debit getDebitMenuView();
+	String addPaymentContractView();
+	
+	BigDecimal addDebitPaymentview(String minDebit);
 	
 	void showContractNotFound(); 
 	

@@ -8,6 +8,9 @@ public class Launcher {
 	public static void main(String[] args) throws ServiceException {
 
 		CreditController controller = new CreditController();
-		controller.launch();
+		controller.selectLanguage();
+		while(true){
+			controller.selectOperation();
+		}
 	}
 }

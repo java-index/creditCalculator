@@ -20,3 +20,4 @@ public enum RepaymentTypeEnum {
 		return creditLogic;
 	}
 }
+

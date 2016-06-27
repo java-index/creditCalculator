@@ -9,5 +9,6 @@ public class ExitCommand implements ActionCommand {
 	@Override
 	public void execute() throws ServiceException {
 		CreditController.view.bye();
+		System.exit(0);
 	}
 }

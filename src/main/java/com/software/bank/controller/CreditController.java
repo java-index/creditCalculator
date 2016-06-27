@@ -11,20 +11,21 @@ public class CreditController {
 	public static IVisual view = new VisualEng();
 	public static IDataInput input = new ReadConsole();
 
-	public void launch() {
-		while (true) {
-			String languageChoice = view.languageChoiceMenuView();
-			mainProcess(languageChoice);
-			String operationChoice = view.operationChoiceMenuView();
-			mainProcess(operationChoice);
-		}
+	public void selectLanguage() {
+		String languageChoice = view.languageChoiceMenuView();
+		mainProcess(languageChoice);
+	}
+	
+	public void selectOperation() {
+		String operationChoice = view.operationChoiceMenuView();
+		mainProcess(operationChoice);
 	}
 
 	private void mainProcess(String userChoice) {
 		ActionCommand command = ActionFactory.defineCommand(userChoice);
 		try {
 			command.execute();
-			view.showSuccess();
+			//view.showSuccess();
 		} catch (ServiceException e) {
 			view.showInternalError();
 		}

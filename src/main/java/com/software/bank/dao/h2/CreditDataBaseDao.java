@@ -1,5 +1,6 @@
 package com.software.bank.dao.h2;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ public class CreditDataBaseDao implements IDataBase {
 
 	private static final String CREATE_QUERY = 
 			"CREATE TABLE credit (contract_number VARCHAR(60), "
-			+ "summa_credit DOUBLE, summa_debet DOUBLE, term INT, rate DOUBLE, repayment VARCHAR(20))";
+			+ "summa_credit DECIMAL, summa_debet DECIMAL, term INT, rate DECIMAL, repayment VARCHAR(20))";
 	// Create table
 	static {
 		try {
@@ -36,12 +37,13 @@ public class CreditDataBaseDao implements IDataBase {
 				+ "VALUES (?, ?, ?, ?, ?, ?)";
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setString(1, credit.getContractNumber());
-				statement.setDouble(2, credit.getSummaCredit());
-				statement.setDouble(3, 0);
-				statement.setInt(4, credit.getTerm());
-				statement.setDouble(5, credit.getRate());
-				statement.setString(6, credit.getRepayment().toString());
+				int i = 1;
+				statement.setString(i++, credit.getContractNumber());
+				statement.setBigDecimal(i++, credit.getSummaCredit());
+				statement.setBigDecimal(i++, new BigDecimal(0));
+				statement.setInt(i++, credit.getTerm());
+				statement.setBigDecimal(i++, credit.getRate());
+				statement.setString(i++, credit.getRepayment().toString());
 				statement.executeUpdate();
 			} 
 		} catch (SQLException e){
@@ -50,12 +52,13 @@ public class CreditDataBaseDao implements IDataBase {
 	}
 
 	@Override
-	public void addPayment(String contractNumber, double summa_debet) throws DaoException {
-		final String querySql = "UPDATE credit SET summa_debet = summa_debet + ? WHERE contract_number = ?";
+	public void addPayment(String contractNumber, BigDecimal summa_debet) throws DaoException {
+		final String querySql = "UPDATE credit SET summa_debet = ? WHERE contract_number = ?";
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setDouble(1, summa_debet);
-				statement.setString(2, contractNumber);
+				int i = 1;
+				statement.setBigDecimal(i++, summa_debet);
+				statement.setString(i++, contractNumber);
 				statement.executeUpdate();
 			} 
 		} catch (SQLException e){
@@ -69,14 +72,15 @@ public class CreditDataBaseDao implements IDataBase {
 		Credit credit = null;
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
-				statement.setString(1,contractNumber);
+				statement.setString(1, contractNumber);
 				ResultSet rs = statement.executeQuery();
 				while(rs.next()){
 					credit = new Credit();
 					credit.setContractNumber(rs.getString("contract_number"));
-					credit.setSummaCredit(rs.getDouble("summa_credit"));
+					credit.setSummaCredit(rs.getBigDecimal("summa_credit"));
+					credit.setSummaDebit(rs.getBigDecimal("summa_debet"));
 					credit.setTerm(rs.getInt("term"));
-					credit.setRate(rs.getDouble("rate"));
+					credit.setRate(rs.getBigDecimal("rate"));
 					credit.setRepayment(RepaymentTypeEnum.valueOf(rs.getString("repayment")));
 				}
 				rs.close();
