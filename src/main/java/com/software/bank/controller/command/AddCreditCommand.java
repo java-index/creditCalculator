@@ -13,5 +13,6 @@ public class AddCreditCommand implements ActionCommand {
 		Credit credit = CreditController.view.addCreditMenuView();
 		ICreditLogic creditLogic = credit.getRepayment().getRepaymentMethod();
 		creditLogic.addCredit(credit);
+		CreditController.view.showSuccess();
 	}
 }

@@ -25,7 +25,6 @@ public class CreditController {
 		ActionCommand command = ActionFactory.defineCommand(userChoice);
 		try {
 			command.execute();
-			//view.showSuccess();
 		} catch (ServiceException e) {
 			view.showInternalError();
 		}

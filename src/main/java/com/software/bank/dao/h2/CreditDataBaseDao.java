@@ -7,19 +7,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.software.bank.controller.CreditController;
 import com.software.bank.dao.ConnectionFactory;
 import com.software.bank.dao.IDataBase;
 import com.software.bank.dao.exception.DaoException;
 import com.software.bank.service.RepaymentTypeEnum;
 import com.software.bank.service.model.Credit;
-import com.software.bank.view.KeyMessage;
 
 public class CreditDataBaseDao implements IDataBase {
 
 	private static final String CREATE_QUERY = 
 			"CREATE TABLE credit (contract_number VARCHAR(60), "
-			+ "summa_credit DECIMAL, summa_debet DECIMAL, term INT, rate DECIMAL, repayment VARCHAR(20))";
+			+ "total_credit DECIMAL, total_debet DECIMAL, term INT, rate DECIMAL, repayment VARCHAR(20))";
 	// Create table
 	static {
 		try {
@@ -33,13 +31,13 @@ public class CreditDataBaseDao implements IDataBase {
 
 	@Override
 	public void addCredit(Credit credit) throws DaoException {
-		final String querySql = "INSERT INTO credit (contract_number, summa_credit, summa_debet, term, rate, repayment) "
+		final String querySql = "INSERT INTO credit (contract_number, total_credit, total_debet, term, rate, repayment) "
 				+ "VALUES (?, ?, ?, ?, ?, ?)";
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
 				int i = 1;
 				statement.setString(i++, credit.getContractNumber());
-				statement.setBigDecimal(i++, credit.getSummaCredit());
+				statement.setBigDecimal(i++, credit.getTotalCredit());
 				statement.setBigDecimal(i++, new BigDecimal(0));
 				statement.setInt(i++, credit.getTerm());
 				statement.setBigDecimal(i++, credit.getRate());
@@ -52,12 +50,12 @@ public class CreditDataBaseDao implements IDataBase {
 	}
 
 	@Override
-	public void addPayment(String contractNumber, BigDecimal summa_debet) throws DaoException {
-		final String querySql = "UPDATE credit SET summa_debet = ? WHERE contract_number = ?";
+	public void addPayment(String contractNumber, BigDecimal total_debet) throws DaoException {
+		final String querySql = "UPDATE credit SET total_debet = ? WHERE contract_number = ?";
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
 				int i = 1;
-				statement.setBigDecimal(i++, summa_debet);
+				statement.setBigDecimal(i++, total_debet);
 				statement.setString(i++, contractNumber);
 				statement.executeUpdate();
 			} 
@@ -77,8 +75,8 @@ public class CreditDataBaseDao implements IDataBase {
 				while(rs.next()){
 					credit = new Credit();
 					credit.setContractNumber(rs.getString("contract_number"));
-					credit.setSummaCredit(rs.getBigDecimal("summa_credit"));
-					credit.setSummaDebit(rs.getBigDecimal("summa_debet"));
+					credit.setTotalCredit(rs.getBigDecimal("total_credit"));
+					credit.setTotalDebit(rs.getBigDecimal("total_debet"));
 					credit.setTerm(rs.getInt("term"));
 					credit.setRate(rs.getBigDecimal("rate"));
 					credit.setRepayment(RepaymentTypeEnum.valueOf(rs.getString("repayment")));

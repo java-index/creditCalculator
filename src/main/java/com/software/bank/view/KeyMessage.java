@@ -28,7 +28,9 @@ public enum KeyMessage {
 	
 	INTERNAL_ERROR("msg.internal.error"),
 	
-	CONTRACT_NOT_FOUND("msg.contract.notfound");
+	CONTRACT_NOT_FOUND("msg.contract.notfound"),
+	
+	PAYMENT_SCHEDULE("msg.payment.schedule");
 	
 	private String key;
 

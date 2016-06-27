@@ -18,7 +18,9 @@ public interface IVisual {
 		
 	String addPaymentContractView();
 	
-	BigDecimal addDebitPaymentview(String minDebit);
+	void showPaymentSchedule(String [] paymentSchedule);
+	
+	BigDecimal addPaymentSummaView(String minDebit);
 	
 	void showContractNotFound(); 
 	

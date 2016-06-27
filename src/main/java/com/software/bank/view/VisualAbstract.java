@@ -48,7 +48,7 @@ public abstract class VisualAbstract implements IVisual {
 		
 		CreditController.view.printMessage(KeyMessage.ENTER_CREDIT);
 		double summaCredit = readDouble();
-		credit.setSummaCredit(BigDecimal.valueOf(summaCredit));
+		credit.setTotalCredit(BigDecimal.valueOf(summaCredit));
 		
 		CreditController.view.printMessage(KeyMessage.ENTER_RATE);
 		double rate = readDouble();
@@ -63,6 +63,14 @@ public abstract class VisualAbstract implements IVisual {
 		
 		return credit;
 	}
+	
+	@Override
+	public void showPaymentSchedule(String[] paymentSchedule) {
+		CreditController.view.printMessage(KeyMessage.PAYMENT_SCHEDULE);
+		for(String s : paymentSchedule){
+			print(s);
+		}
+	}
 
 	@Override
 	public String addPaymentContractView() {
@@ -71,7 +79,7 @@ public abstract class VisualAbstract implements IVisual {
 	}
 	
 	@Override
-	public BigDecimal addDebitPaymentview(String minDebit){
+	public BigDecimal addPaymentSummaView(String minDebit){
 		CreditController.view.printMessage(KeyMessage.MIN_PAYMENT);
 		CreditController.view.printMessage(minDebit);
 		CreditController.view.printMessage(KeyMessage.ENTER_PAYMENT);

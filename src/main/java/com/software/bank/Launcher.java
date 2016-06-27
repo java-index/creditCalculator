@@ -12,5 +12,6 @@ public class Launcher {
 		while(true){
 			controller.selectOperation();
 		}
+
 	}
 }

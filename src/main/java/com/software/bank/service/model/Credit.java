@@ -7,8 +7,8 @@ import com.software.bank.service.RepaymentTypeEnum;
 public class Credit {
 	
 	private String contractNumber;
-	private BigDecimal summaCredit;
-	private BigDecimal summaDebit;
+	private BigDecimal totalCredit;
+	private BigDecimal totalDebit;
 	private int term;
 	private BigDecimal rate;
 	private RepaymentTypeEnum repayment;
@@ -21,20 +21,20 @@ public class Credit {
 		this.contractNumber = contractNumber;
 	}
 	
-	public BigDecimal getSummaDebit() {
-		return summaDebit;
+	public BigDecimal getTotalCredit() {
+		return totalCredit;
 	}
 
-	public void setSummaDebit(BigDecimal summaDebit) {
-		this.summaDebit = summaDebit;
+	public void setTotalCredit(BigDecimal totalCredit) {
+		this.totalCredit = totalCredit;
 	}
 
-	public BigDecimal getSummaCredit() {
-		return summaCredit;
+	public BigDecimal getTotalDebit() {
+		return totalDebit;
 	}
-	
-	public void setSummaCredit(BigDecimal summaCredit) {
-		this.summaCredit = summaCredit;
+
+	public void setTotalDebit(BigDecimal totalDebit) {
+		this.totalDebit = totalDebit;
 	}
 
 	public int getTerm() {
@@ -64,10 +64,10 @@ public class Credit {
 	@Override
 	public String toString() {
 		return "contractNumber: " + contractNumber + 
-				" summaCredit:  " + summaCredit + 
-				" summaDebit: " + summaDebit + 
-				" term: " + term + 
-				" rate: " + rate + 
-				" repayment: " + repayment;
+				" Credit (UAH):  " + totalCredit + 
+				" Debit (UAH): " + totalDebit + 
+				" Term (M): " + term + 
+				" Rate (%): " + rate + 
+				" Repayment: " + repayment;
 	}
 }

@@ -1,6 +1,7 @@
 package com.software.bank.controller.command;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.software.bank.controller.ActionCommand;
 import com.software.bank.controller.CreditController;
@@ -8,6 +9,7 @@ import com.software.bank.service.ICreditLogic;
 import com.software.bank.service.RepaymentTypeEnum;
 import com.software.bank.service.exception.ServiceException;
 import com.software.bank.service.model.Credit;
+import com.software.bank.service.model.Debit;
 
 public class AddPaymentCommand implements ActionCommand {
 
@@ -21,11 +23,20 @@ public class AddPaymentCommand implements ActionCommand {
 			CreditController.view.showContractNotFound();
 			return;
 		}
-		creditLogic = currentCredit.getRepayment().getRepaymentMethod(); // change to really repayment method
-		String minDebit = creditLogic.getMinPayment(currentCredit);
 		
-		BigDecimal summaDebit = CreditController.view.addDebitPaymentview(minDebit);
-		summaDebit = summaDebit.add(currentCredit.getSummaDebit());
-		creditLogic.addPayment(contractNumber, summaDebit);
+		// change to really repayment method
+		creditLogic = currentCredit.getRepayment().getRepaymentMethod(); 
+		
+		// get min debit
+		Debit minDebit = creditLogic.getMinPayment(currentCredit);
+		
+		// get user enter
+		BigDecimal currentDebit = CreditController.view.addPaymentSummaView(minDebit.getMinDebit().setScale(2, RoundingMode.HALF_UP).toString());
+		minDebit.setCurrentDebit(currentDebit);
+		
+		// save
+		creditLogic.addPayment(minDebit);
+		
+		CreditController.view.showSuccess();
 	}
 }
