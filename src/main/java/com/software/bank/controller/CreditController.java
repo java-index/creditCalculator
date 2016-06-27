@@ -8,8 +8,8 @@ import com.software.bank.view.input.ReadConsole;
 
 public class CreditController {
 
-	public static IVisual view = new VisualEng();
-	public static IDataInput input = new ReadConsole();
+	public static IVisual view; // = new VisualEng();
+	public static IDataInput input; // = new ReadConsole();
 
 	public void selectLanguage() {
 		String languageChoice = view.languageChoiceMenuView();

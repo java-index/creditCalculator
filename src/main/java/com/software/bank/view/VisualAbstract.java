@@ -26,7 +26,7 @@ public abstract class VisualAbstract implements IVisual {
 	@Override
 	public String languageChoiceMenuView() {
 		String idMenu = "_lang";
-		CreditController.view.printMessage(KeyMessage.SELECT_LANGUAGE);
+		printMessage(KeyMessage.SELECT_LANGUAGE);
 		String choice = CreditController.input.read();
 		return choice + idMenu;
 	}
@@ -34,7 +34,7 @@ public abstract class VisualAbstract implements IVisual {
 	@Override
 	public String operationChoiceMenuView() {
 		String idMenu = "_oper";
-		CreditController.view.printMessage(KeyMessage.SELECT_OPERATION);
+		printMessage(KeyMessage.SELECT_OPERATION);
 		String choice = CreditController.input.read();
 		return choice + idMenu;
 	}
@@ -43,21 +43,21 @@ public abstract class VisualAbstract implements IVisual {
 	public Credit addCreditMenuView() {
 		Credit credit = new Credit();
 		
-		CreditController.view.printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
+		printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
 		credit.setContractNumber(CreditController.input.read());
 		
-		CreditController.view.printMessage(KeyMessage.ENTER_CREDIT);
+		printMessage(KeyMessage.ENTER_CREDIT);
 		double summaCredit = readDouble();
 		credit.setTotalCredit(BigDecimal.valueOf(summaCredit));
 		
-		CreditController.view.printMessage(KeyMessage.ENTER_RATE);
+		printMessage(KeyMessage.ENTER_RATE);
 		double rate = readDouble();
 		credit.setRate(BigDecimal.valueOf(rate));
 		
-		CreditController.view.printMessage(KeyMessage.ENTER_TERM);
+		printMessage(KeyMessage.ENTER_TERM);
 		credit.setTerm(readInt());
 		
-		CreditController.view.printMessage(KeyMessage.SELECT_REPAYMENT);
+		printMessage(KeyMessage.SELECT_REPAYMENT);
 		int repayment = readInt(1, 2);
 		credit.setRepayment(RepaymentTypeEnum.values()[repayment-1]);
 		
@@ -66,7 +66,7 @@ public abstract class VisualAbstract implements IVisual {
 	
 	@Override
 	public void showPaymentSchedule(String[] paymentSchedule) {
-		CreditController.view.printMessage(KeyMessage.PAYMENT_SCHEDULE);
+		printMessage(KeyMessage.PAYMENT_SCHEDULE);
 		for(String s : paymentSchedule){
 			print(s);
 		}
@@ -74,32 +74,32 @@ public abstract class VisualAbstract implements IVisual {
 
 	@Override
 	public String addPaymentContractView() {
-		CreditController.view.printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
+		printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
 		return CreditController.input.read();
 	}
 	
 	@Override
 	public BigDecimal addPaymentSummaView(String minDebit){
-		CreditController.view.printMessage(KeyMessage.MIN_PAYMENT);
-		CreditController.view.printMessage(minDebit);
-		CreditController.view.printMessage(KeyMessage.ENTER_PAYMENT);
+		printMessage(KeyMessage.MIN_PAYMENT);
+		printMessage(minDebit);
+		printMessage(KeyMessage.ENTER_PAYMENT);
 		double summaDebit = readDouble();
 		return BigDecimal.valueOf(summaDebit);
 	}
 	
 	@Override
 	public void showContractNotFound() {
-		CreditController.view.printMessage(KeyMessage.CONTRACT_NOT_FOUND);
+		printMessage(KeyMessage.CONTRACT_NOT_FOUND);
 	}
 	
 	@Override
 	public void showInternalError() {
-		CreditController.view.printMessage(KeyMessage.INTERNAL_ERROR);
+		printMessage(KeyMessage.INTERNAL_ERROR);
 	}
 	
 	@Override
 	public void showSuccess() {
-		CreditController.view.printMessage(KeyMessage.SUCCESS);
+		printMessage(KeyMessage.SUCCESS);
 		print("--------------------\n");
 	}
 	
@@ -128,7 +128,7 @@ public abstract class VisualAbstract implements IVisual {
 				value = CreditController.input.readDouble();
 				break;
 			} catch (NoSuchElementException e) {
-				CreditController.view.printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
+				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
 				continue;
 			}
 		}
@@ -142,7 +142,7 @@ public abstract class VisualAbstract implements IVisual {
 				value = CreditController.input.readInt();
 				break;
 			} catch (NoSuchElementException e) {
-				CreditController.view.printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
+				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
 				continue;
 			}
 		}
@@ -159,7 +159,7 @@ public abstract class VisualAbstract implements IVisual {
 					throw new NoSuchElementException();
 				}
 			} catch (NoSuchElementException e) {
-				CreditController.view.printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
+				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
 				continue;
 			}
 		}
