@@ -3,25 +3,13 @@ package com.software.bank.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.software.bank.controller.CreditController;
-import com.software.bank.dao.exception.DaoException;
-import com.software.bank.service.exception.ServiceException;
 import com.software.bank.service.model.Credit;
 import com.software.bank.service.model.Debit;
 
 public class Annuity extends CreditAbstract {
 	
 	@Override
-	public void addPayment(Debit debit) throws ServiceException {
-		try {
-			ICreditLogic.bataBase.addPayment(debit.getContractNumber(), debit.getCurrentDebit());
-		} catch (DaoException e) {
-			CreditController.view.showInternalError();
-		}
-	}
-	
-	@Override
-	public Debit getMinPayment(Credit credit) {
+	protected Debit getMinPayment(Credit credit) {
 		// X (min payment) = S * K 
 		// K - factor of annuity p *  ((1 + p)^n / (1+P)^n - 1)
 		// S - credit total
@@ -51,5 +39,15 @@ public class Annuity extends CreditAbstract {
 		minDebit.setContractNumber(credit.getContractNumber());
 		
 		return minDebit;
+	}
+	
+	protected String [] createPaymentSchedule(Credit credit){
+		int term = credit.getTerm();
+		String [] schedule = new String[term];
+		String minDebit =  getMinPayment(credit).getMinDebit().toString();
+		for(int i = 0; i< schedule.length; i++){
+			schedule[i] = minDebit;
+		}
+		return schedule;
 	}
 }

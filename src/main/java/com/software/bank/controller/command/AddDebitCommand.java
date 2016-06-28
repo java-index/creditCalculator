@@ -4,10 +4,11 @@ import com.software.bank.controller.ActionCommand;
 import com.software.bank.service.ICreditLogic;
 import com.software.bank.service.exception.ServiceException;
 
-public class AddCreditCommand implements ActionCommand {
-	
+
+public class AddDebitCommand implements ActionCommand {
+
 	@Override
 	public void execute(ICreditLogic creditLogic) throws ServiceException {
-		creditLogic.addCredit();
+		creditLogic.addDebit();
 	}
 }

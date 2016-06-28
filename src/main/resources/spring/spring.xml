@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="eng" class="com.software.bank.view.VisualEng" />
+	<bean id="h2db" class="com.software.bank.dao.h2.CreditDataBaseDao" />
 	
-	<bean id="ukr" class="com.software.bank.view.VisualUkr" />
+	<!-- Console Scan -->
+	<bean id="consoleInput" class="com.software.bank.view.input.ReadConsole" />
 	
-	<bean id="rus" class="com.software.bank.view.VisualRus" />
-
-	<bean id="creditController" class="com.software.bank.controller.CreditController">
-		<property name="view" ref="viewEng" />
+	<!-- Russian -->
+	<bean id="RU" class="com.software.bank.view.VisualRus" >
+		<property name="input" ref="consoleInput" />
+	</bean>
+	
+	<!-- Ukrainan -->
+	<bean id="UA" class="com.software.bank.view.VisualUkr" >
+		<property name="input" ref="consoleInput" />
+	</bean>
+	
+	<!-- English -->
+	<bean id="EN" class="com.software.bank.view.VisualEng" >
+		<property name="input" ref="consoleInput" />
+	</bean>
+	
+	<bean id="annuity" class="com.software.bank.service.Annuity" >
+		<property name="view" ref="RU" />
+		<property name="dataBase" ref="h2db" />
 	</bean>
 
-
+	<bean id="decliningBalance" class="com.software.bank.service.DecliningBalance" >
+		<property name="view" ref="EN" />
+		<property name="dataBase" ref="h2db" />
+	</bean>
+	
+	<bean id="creditAnnuity" class="com.software.bank.controller.CreditController">
+		<property name="creditLogic" ref="annuity" />
+	</bean>
+	
+	<bean id="creditDecliningBalance" class="com.software.bank.controller.CreditController">
+		<property name="creditLogic" ref="decliningBalance" />
+	</bean>
 </beans>

@@ -10,11 +10,11 @@ public class Launcher {
 
 	public static void main(String[] args) throws ServiceException {
         ApplicationContext ctx = new ClassPathXmlApplicationContext(new String[] {"spring/spring.xml"});
-        CreditController controller = ctx.getBean("creditController", CreditController.class);
+        CreditController controller = ctx.getBean("creditDecliningBalance", CreditController.class);
+        //CreditController controller = ctx.getBean("creditAnnuity", CreditController.class);
         
-        controller.selectLanguage();
 		while(true){
-			controller.selectOperation();
+			controller.choiceOperation();
 		}
 	}
 }

@@ -3,52 +3,45 @@ package com.software.bank.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.software.bank.controller.CreditController;
-import com.software.bank.dao.exception.DaoException;
-import com.software.bank.service.exception.ServiceException;
 import com.software.bank.service.model.Credit;
 import com.software.bank.service.model.Debit;
 
 public class DecliningBalance extends CreditAbstract {
-	
-	@Override
-	public void addPayment(Debit debit) throws ServiceException {
-		BigDecimal currentDebit = debit.getCurrentDebit().subtract(debit.getPercent()).setScale(2, RoundingMode.HALF_UP);
-		BigDecimal newTotalDebet = currentDebit.add(debit.getTotalDebit());
-		try {
-			ICreditLogic.bataBase.addPayment(debit.getContractNumber(), newTotalDebet);
-		} catch (DaoException e) {
-			CreditController.view.showInternalError();
-		}
-	}
 
 	@Override
-	public Debit getMinPayment(Credit credit) {
-		
-		System.err.println(credit);
+	protected Debit getMinPayment(Credit credit) {
 		// baseDebit = credit/term
 		// profit = creditRemainder * ( rate/12/100)
 		// current debit = baseDebit + profit;
 		
-		Debit minDebit = new Debit();
+		Debit debit = new Debit();
 		int monthInYear = 12;
-		int scale = 6;
+		int scale = 4;
 		
 		BigDecimal baseCredit = credit.getTotalCredit().divide(new BigDecimal(credit.getTerm()), scale, RoundingMode.HALF_UP);
+			
+		// creditRemainder * ( rate/12/100)
+		BigDecimal percent = credit.getTotalCredit().subtract(credit.getTotalDebit())
+				.multiply(credit.getRate().divide(new BigDecimal(monthInYear), scale, RoundingMode.HALF_UP)
+				.divide(new BigDecimal(100), 6, RoundingMode.HALF_UP));
 		
-		System.err.println(baseCredit);				
-		
-		BigDecimal percent = credit.getTotalCredit().subtract(credit.getTotalDebit()).multiply(credit.getRate().divide(new BigDecimal(monthInYear), scale, RoundingMode.HALF_UP).divide(new BigDecimal(100), 6, RoundingMode.HALF_UP));
-		
-		System.err.println(percent);				
-		
-		BigDecimal  minDebitPayment = baseCredit.add(percent).setScale(2, RoundingMode.HALF_UP);
-		
-		minDebit.setMinDebit(minDebitPayment.setScale(4, RoundingMode.HALF_UP));
-		minDebit.setTotalDebit(credit.getTotalDebit());
-		minDebit.setPercent(percent.setScale(4, RoundingMode.HALF_UP));
-		minDebit.setContractNumber(credit.getContractNumber());
-		
-		return minDebit;
+		BigDecimal  minDebitPayment = baseCredit.add(percent);
+		debit.setMinDebit(minDebitPayment.setScale(scale, RoundingMode.HALF_UP));
+		debit.setPercent(percent.setScale(scale, RoundingMode.HALF_UP));
+		debit.setTotalDebit(credit.getTotalDebit().setScale(scale, RoundingMode.HALF_UP));
+		debit.setContractNumber(credit.getContractNumber());
+		return debit;
+	}
+	
+	protected String [] createPaymentSchedule(Credit credit){
+		credit.setTotalDebit(new BigDecimal("0.0"));
+		int term = credit.getTerm();
+		String [] schedule = new String[term];
+		for(int i = 0; i< schedule.length; i++){
+			Debit debit = getMinPayment(credit);
+			schedule [i] = getMinPayment(credit).getMinDebit().toString();
+			credit.setTotalDebit(credit.getTotalDebit().add(debit.getMinDebit()));
+		}
+		return schedule;
 	}
 }

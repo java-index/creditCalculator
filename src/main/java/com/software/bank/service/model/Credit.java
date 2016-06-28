@@ -2,8 +2,6 @@ package com.software.bank.service.model;
 
 import java.math.BigDecimal;
 
-import com.software.bank.service.RepaymentTypeEnum;
-
 public class Credit {
 	
 	private String contractNumber;
@@ -11,7 +9,6 @@ public class Credit {
 	private BigDecimal totalDebit;
 	private int term;
 	private BigDecimal rate;
-	private RepaymentTypeEnum repayment;
 	
 	public String getContractNumber() {
 		return contractNumber;
@@ -53,21 +50,12 @@ public class Credit {
 		this.rate = rate;
 	}
 	
-	public RepaymentTypeEnum getRepayment() {
-		return repayment;
-	}
-	
-	public void setRepayment(RepaymentTypeEnum repayment) {
-		this.repayment = repayment;
-	}
-	
 	@Override
 	public String toString() {
 		return "contractNumber: " + contractNumber + 
 				" Credit (UAH):  " + totalCredit + 
 				" Debit (UAH): " + totalDebit + 
 				" Term (M): " + term + 
-				" Rate (%): " + rate + 
-				" Repayment: " + repayment;
+				" Rate (%): " + rate;
 	}
 }

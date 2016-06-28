@@ -53,6 +53,4 @@ public class Debit {
 	public void setTotalDebit(BigDecimal totalDebit) {
 		this.totalDebit = totalDebit;
 	}
-
-	
 }

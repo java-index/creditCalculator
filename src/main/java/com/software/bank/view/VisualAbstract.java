@@ -1,11 +1,11 @@
 package com.software.bank.view;
 
+import java.awt.RenderingHints.Key;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
-import com.software.bank.service.RepaymentTypeEnum;
 import com.software.bank.service.model.Credit;
 import com.software.bank.view.input.ReadConsole;
 
@@ -13,7 +13,15 @@ public abstract class VisualAbstract implements IVisual {
 
 	protected ResourceBundle resourceBundle;
 	
-	private ReadConsole input = new ReadConsole();
+	private ReadConsole input;
+
+	public ReadConsole getInput() {
+		return input;
+	}
+
+	public void setInput(ReadConsole input) {
+		this.input = input;
+	}
 
 	@Override
 	public void printMessage(KeyMessage key) {
@@ -26,19 +34,10 @@ public abstract class VisualAbstract implements IVisual {
 	}
 
 	@Override
-	public String languageChoiceMenuView() {
-		String idMenu = "_lang";
-		printMessage(KeyMessage.SELECT_LANGUAGE);
-		String choice = input.read();
-		return choice + idMenu;
-	}
-	
-	@Override
 	public String operationChoiceMenuView() {
-		String idMenu = "_oper";
 		printMessage(KeyMessage.SELECT_OPERATION);
 		String choice = input.read();
-		return choice + idMenu;
+		return choice;
 	}
 	
 	@Override
@@ -58,10 +57,6 @@ public abstract class VisualAbstract implements IVisual {
 		
 		printMessage(KeyMessage.ENTER_TERM);
 		credit.setTerm(readInt());
-		
-		printMessage(KeyMessage.SELECT_REPAYMENT);
-		int repayment = readInt(1, 2);
-		credit.setRepayment(RepaymentTypeEnum.values()[repayment-1]);
 		
 		return credit;
 	}
@@ -149,21 +144,5 @@ public abstract class VisualAbstract implements IVisual {
 			}
 		}
 		return value;
-	}
-	
-	private int readInt(int min, int max){
-		while (true){
-			try{
-				int value = input.readInt();
-				if(value >= min && value <= max){
-					return value;
-				} else {
-					throw new NoSuchElementException();
-				}
-			} catch (NoSuchElementException e) {
-				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
-				continue;
-			}
-		}
 	}
 }

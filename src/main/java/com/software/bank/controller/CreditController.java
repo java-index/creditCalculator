@@ -1,29 +1,27 @@
 package com.software.bank.controller;
 
+import com.software.bank.service.ICreditLogic;
 import com.software.bank.service.exception.ServiceException;
-import com.software.bank.view.IVisual;
-import com.software.bank.view.VisualEng;
 
 public class CreditController {
 
-	public static IVisual view; // = new VisualEng();
-
-	public void selectLanguage() {
-		String languageChoice = view.languageChoiceMenuView();
-		mainProcess(languageChoice);
-	}
+	private ICreditLogic creditLogic;
 	
-	public void selectOperation() {
-		String operationChoice = view.operationChoiceMenuView();
-		mainProcess(operationChoice);
+	public ICreditLogic getCreditLogic() {
+		return creditLogic;
 	}
 
-	private void mainProcess(String userChoice) {
-		ActionCommand command = ActionFactory.defineCommand(userChoice);
+	public void setCreditLogic(ICreditLogic creditLogic) {
+		this.creditLogic = creditLogic;
+	}
+
+	public void choiceOperation() {
+		String operationChoice = creditLogic.getView().operationChoiceMenuView();
+		ActionCommand command = ActionFactory.defineCommand(operationChoice);
 		try {
-			command.execute();
+			command.execute(creditLogic);
 		} catch (ServiceException e) {
-			view.showInternalError();
+			creditLogic.getView().showInternalError();
 		}
 	}
 }

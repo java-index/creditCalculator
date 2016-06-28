@@ -10,8 +10,6 @@ public interface IVisual {
 	
 	void printMessage(String mesage);
 	
-	String languageChoiceMenuView();
-
 	String operationChoiceMenuView(); 
 	
 	Credit addCreditMenuView(); 
