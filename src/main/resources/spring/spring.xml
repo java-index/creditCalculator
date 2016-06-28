@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
-                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
- 
-    <bean id="creditController" class="com.software.bank.controller.CreditController">
-    </bean>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="eng" class="com.software.bank.view.VisualEng" />
+	
+	<bean id="ukr" class="com.software.bank.view.VisualUkr" />
+	
+	<bean id="rus" class="com.software.bank.view.VisualRus" />
+
+	<bean id="creditController" class="com.software.bank.controller.CreditController">
+		<property name="view" ref="viewEng" />
+	</bean>
+
+
 </beans>

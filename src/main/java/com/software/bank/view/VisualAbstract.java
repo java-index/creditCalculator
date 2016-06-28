@@ -5,13 +5,15 @@ import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
-import com.software.bank.controller.CreditController;
 import com.software.bank.service.RepaymentTypeEnum;
 import com.software.bank.service.model.Credit;
+import com.software.bank.view.input.ReadConsole;
 
 public abstract class VisualAbstract implements IVisual {
 
 	protected ResourceBundle resourceBundle;
+	
+	private ReadConsole input = new ReadConsole();
 
 	@Override
 	public void printMessage(KeyMessage key) {
@@ -27,7 +29,7 @@ public abstract class VisualAbstract implements IVisual {
 	public String languageChoiceMenuView() {
 		String idMenu = "_lang";
 		printMessage(KeyMessage.SELECT_LANGUAGE);
-		String choice = CreditController.input.read();
+		String choice = input.read();
 		return choice + idMenu;
 	}
 	
@@ -35,7 +37,7 @@ public abstract class VisualAbstract implements IVisual {
 	public String operationChoiceMenuView() {
 		String idMenu = "_oper";
 		printMessage(KeyMessage.SELECT_OPERATION);
-		String choice = CreditController.input.read();
+		String choice = input.read();
 		return choice + idMenu;
 	}
 	
@@ -44,7 +46,7 @@ public abstract class VisualAbstract implements IVisual {
 		Credit credit = new Credit();
 		
 		printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
-		credit.setContractNumber(CreditController.input.read());
+		credit.setContractNumber(input.read());
 		
 		printMessage(KeyMessage.ENTER_CREDIT);
 		double summaCredit = readDouble();
@@ -75,7 +77,7 @@ public abstract class VisualAbstract implements IVisual {
 	@Override
 	public String addPaymentContractView() {
 		printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
-		return CreditController.input.read();
+		return input.read();
 	}
 	
 	@Override
@@ -100,12 +102,12 @@ public abstract class VisualAbstract implements IVisual {
 	@Override
 	public void showSuccess() {
 		printMessage(KeyMessage.SUCCESS);
-		print("--------------------\n");
+		printMessage("--------------------\n");
 	}
 	
 	@Override
 	public void bye() {
-		CreditController.view.printMessage(KeyMessage.BYE);
+		printMessage(KeyMessage.BYE);
 	}
 	
 	private String extractMessage(KeyMessage key) {
@@ -125,7 +127,7 @@ public abstract class VisualAbstract implements IVisual {
 		double value = 0;
 		while (true){
 			try{
-				value = CreditController.input.readDouble();
+				value = input.readDouble();
 				break;
 			} catch (NoSuchElementException e) {
 				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
@@ -139,7 +141,7 @@ public abstract class VisualAbstract implements IVisual {
 		int value = 0;
 		while (true){
 			try{
-				value = CreditController.input.readInt();
+				value = input.readInt();
 				break;
 			} catch (NoSuchElementException e) {
 				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
@@ -152,7 +154,7 @@ public abstract class VisualAbstract implements IVisual {
 	private int readInt(int min, int max){
 		while (true){
 			try{
-				int value = CreditController.input.readInt();
+				int value = input.readInt();
 				if(value >= min && value <= max){
 					return value;
 				} else {
