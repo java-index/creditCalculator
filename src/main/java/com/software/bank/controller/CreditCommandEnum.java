@@ -18,7 +18,6 @@ public enum CreditCommandEnum {
 		}
 	},
 	
-
 	EXIT {
 		{
 			this.command = new ExitCommand();
