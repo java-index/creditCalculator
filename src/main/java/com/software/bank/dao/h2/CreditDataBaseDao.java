@@ -16,7 +16,7 @@ public class CreditDataBaseDao implements IDataBase {
 	
 	private static final String CREATE_QUERY = 
 			"CREATE TABLE credit (contract_number VARCHAR(60), "
-			+ "total_credit DECIMAL, total_debet DECIMAL, term INT, rate DECIMAL)";
+			+ "total_credit DECIMAL, total_debet DECIMAL, term INT, rate DECIMAL, qty_payments INT)";
 	// Create table
 	static {
 		try {
@@ -30,8 +30,8 @@ public class CreditDataBaseDao implements IDataBase {
 
 	@Override
 	public void addCredit(Credit credit) throws DaoException {
-		final String querySql = "INSERT INTO credit (contract_number, total_credit, total_debet, term, rate) "
-				+ "VALUES (?, ?, ?, ?, ?)";
+		final String querySql = "INSERT INTO credit (contract_number, total_credit, total_debet, term, rate, qty_payments) "
+				+ "VALUES (?, ?, ?, ?, ?, ?)";
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
 				int i = 1;
@@ -40,6 +40,7 @@ public class CreditDataBaseDao implements IDataBase {
 				statement.setBigDecimal(i++, new BigDecimal("0.0"));
 				statement.setInt(i++, credit.getTerm());
 				statement.setBigDecimal(i++, credit.getRate());
+				statement.setInt(i++, 0);
 				statement.executeUpdate();
 			} 
 		} catch (SQLException e){
@@ -49,7 +50,7 @@ public class CreditDataBaseDao implements IDataBase {
 
 	@Override
 	public void addPayment(String contractNumber, BigDecimal total_debet) throws DaoException {
-		final String querySql = "UPDATE credit SET total_debet = ? WHERE contract_number = ?";
+		final String querySql = "UPDATE credit SET total_debet = ?, qty_payments = qty_payments + 1  WHERE contract_number = ?";
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
 				int i = 1;
@@ -77,10 +78,13 @@ public class CreditDataBaseDao implements IDataBase {
 					credit.setTotalDebit(rs.getBigDecimal("total_debet"));
 					credit.setTerm(rs.getInt("term"));
 					credit.setRate(rs.getBigDecimal("rate"));
+					credit.setQtyPayments(rs.getInt("qty_payments"));
 				}
 				rs.close();
 			} 
 		} catch (SQLException e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 			throw new DaoException(e);
 		} 
 		return credit;

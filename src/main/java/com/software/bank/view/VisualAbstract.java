@@ -1,6 +1,5 @@
 package com.software.bank.view;
 
-import java.awt.RenderingHints.Key;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
@@ -24,16 +23,6 @@ public abstract class VisualAbstract implements IVisual {
 	}
 
 	@Override
-	public void printMessage(KeyMessage key) {
-		print(extractMessage(key));
-	}
-	
-	@Override
-	public void printMessage(String message) {
-		print(message);
-	}
-
-	@Override
 	public String operationChoiceMenuView() {
 		printMessage(KeyMessage.SELECT_OPERATION);
 		String choice = input.read();
@@ -48,11 +37,11 @@ public abstract class VisualAbstract implements IVisual {
 		credit.setContractNumber(input.read());
 		
 		printMessage(KeyMessage.ENTER_CREDIT);
-		double summaCredit = readDouble();
+		double summaCredit = readDouble(0);
 		credit.setTotalCredit(BigDecimal.valueOf(summaCredit));
 		
 		printMessage(KeyMessage.ENTER_RATE);
-		double rate = readDouble();
+		double rate = readDouble(0);
 		credit.setRate(BigDecimal.valueOf(rate));
 		
 		printMessage(KeyMessage.ENTER_TERM);
@@ -64,8 +53,9 @@ public abstract class VisualAbstract implements IVisual {
 	@Override
 	public void showPaymentSchedule(String[] paymentSchedule) {
 		printMessage(KeyMessage.PAYMENT_SCHEDULE);
-		for(String s : paymentSchedule){
-			print(s);
+		print("--------------------");
+		for(int i = 0; i < paymentSchedule.length; i++){
+			print(String.format("%-2s:%12s", i+1, paymentSchedule[i]));
 		}
 	}
 
@@ -80,7 +70,7 @@ public abstract class VisualAbstract implements IVisual {
 		printMessage(KeyMessage.MIN_PAYMENT);
 		printMessage(minDebit);
 		printMessage(KeyMessage.ENTER_PAYMENT);
-		double summaDebit = readDouble();
+		double summaDebit = readDouble(Double.parseDouble(minDebit));
 		return BigDecimal.valueOf(summaDebit);
 	}
 	
@@ -90,14 +80,25 @@ public abstract class VisualAbstract implements IVisual {
 	}
 	
 	@Override
+	public void showContractClosed() {
+		printMessage(KeyMessage.CONTRACT_CLOSED);
+	}
+	
+	@Override
 	public void showInternalError() {
 		printMessage(KeyMessage.INTERNAL_ERROR);
 	}
 	
 	@Override
+	public void showContractIsExist() {
+		printMessage(KeyMessage.CONTRACT_EXIST);
+	}
+	
+	@Override
 	public void showSuccess() {
+		print("------------------");
 		printMessage(KeyMessage.SUCCESS);
-		printMessage("--------------------\n");
+		print("------------------");
 	}
 	
 	@Override
@@ -114,18 +115,32 @@ public abstract class VisualAbstract implements IVisual {
 		}
 	}
 	
+	private void printMessage(KeyMessage key) {
+		print(extractMessage(key));
+	}
+	
+	private void printMessage(String message) {
+		print(message);
+	}
+	
 	private void print(String message) {
 		System.out.println(message);
 	}
 	
-	private double readDouble(){
+	private double readDouble(double setMinValue){
 		double value = 0;
 		while (true){
 			try{
 				value = input.readDouble();
+				if (value < setMinValue){
+					throw new IllegalArgumentException();
+				}
 				break;
 			} catch (NoSuchElementException e) {
 				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
+				continue;
+			} catch (IllegalArgumentException e) {
+				printMessage(KeyMessage.INPUT_LESS_THAN_VALUE);
 				continue;
 			}
 		}
@@ -137,8 +152,11 @@ public abstract class VisualAbstract implements IVisual {
 		while (true){
 			try{
 				value = input.readInt();
+				if (value < 0){
+					throw new IllegalArgumentException();
+				}
 				break;
-			} catch (NoSuchElementException e) {
+			} catch (IllegalArgumentException | NoSuchElementException e) {
 				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
 				continue;
 			}

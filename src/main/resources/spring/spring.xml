@@ -30,7 +30,7 @@
 	</bean>
 
 	<bean id="decliningBalance" class="com.software.bank.service.DecliningBalance" >
-		<property name="view" ref="EN" />
+		<property name="view" ref="RU" />
 		<property name="dataBase" ref="h2db" />
 	</bean>
 	

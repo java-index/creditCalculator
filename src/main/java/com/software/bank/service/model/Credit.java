@@ -5,11 +5,25 @@ import java.math.BigDecimal;
 public class Credit {
 	
 	private String contractNumber;
+	
 	private BigDecimal totalCredit;
+	
 	private BigDecimal totalDebit;
+	
 	private int term;
+	
 	private BigDecimal rate;
 	
+	private int qtyPayments; 
+	
+	public int getQtyPayments() {
+		return qtyPayments;
+	}
+
+	public void setQtyPayments(int qtyPayments) {
+		this.qtyPayments = qtyPayments;
+	}
+
 	public String getContractNumber() {
 		return contractNumber;
 	}

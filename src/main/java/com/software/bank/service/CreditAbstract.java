@@ -12,7 +12,7 @@ import com.software.bank.view.IVisual;
 
 public abstract class CreditAbstract implements ICreditLogic {
 	
-	protected IVisual view;
+	private IVisual view;
 	
 	private IDataBase dataBase;
 	
@@ -38,41 +38,82 @@ public abstract class CreditAbstract implements ICreditLogic {
 
 	@Override
 	public void addCredit() throws ServiceException {
-		Credit credit = view.addCreditMenuView();
-		String [] paymentSchedule = createPaymentSchedule(credit);
-		view.showPaymentSchedule(paymentSchedule);
+		Credit credit = view.addCreditMenuView(); // get data from user
+		if (isContractExist(credit)){ // check existing contract
+			return;
+		}
+		showSchedulePayments(credit);
 		saveCredit(credit);
 		view.showSuccess();
 	}
 	
 	@Override
 	public void addDebit() throws ServiceException {
-		String contractNumber = view.addPaymentContractView();
+		String contractNumber = view.addPaymentContractView(); // get data from user
 		Credit credit = getCredit(contractNumber);
-		if (credit == null){
-			view.showContractNotFound();
+		
+		if (isContractNotFound(credit) || isContractClosed(credit)) {
 			return;
 		}
-		Debit debit = getMinPayment(credit);
-		// get user enter
-		BigDecimal usersDebit = view.addPaymentSummaView(debit.getMinDebit().setScale(2, RoundingMode.HALF_UP).toString());
-		debit.setCurrentDebit(usersDebit);
-		
-		BigDecimal newTotalDebit = setNewTotalDebit(credit, debit);
-		debit.setTotalDebit(newTotalDebit);
-		
+		Debit debit = getUserPayment(credit);
 		saveDebit(debit);
 		view.showSuccess();
 	}
 	
-	protected void saveDebit(Debit debit) throws ServiceException {
+	private Debit getUserPayment(Credit credit){
+		// calculate minimum payment
+		Debit debit = getMinPayment(credit);
+		// get user enter
+		BigDecimal usersDebit = view.addPaymentSummaView(debit.getMinDebit().setScale(2, RoundingMode.HALF_UP).toString());
+		debit.setCurrentDebit(usersDebit);
+
+		BigDecimal newTotalDebit = setNewTotalDebit(credit, debit);
+		debit.setTotalDebit(newTotalDebit);
+		return debit;
+	}
+	
+	private BigDecimal setNewTotalDebit(Credit credit, Debit debit) {
+		BigDecimal currentDebit = debit.getCurrentDebit().subtract(debit.getPercent()).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal newTotalDebet = currentDebit.add(credit.getTotalDebit());
+		return newTotalDebet;
+	}
+	
+	private void showSchedulePayments(Credit credit){
+		String [] paymentSchedule = createPaymentSchedule(credit);
+		view.showPaymentSchedule(paymentSchedule);
+	}
+	
+	private boolean isContractExist(Credit credit) throws ServiceException {
+		if (getCredit(credit.getContractNumber()) != null){
+			view.showContractIsExist();
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isContractNotFound(Credit credit) {
+		if (credit == null){
+			view.showContractNotFound();
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isContractClosed(Credit credit) {
+		if (credit.getTerm() == credit.getQtyPayments()){
+			view.showContractClosed();
+			return true;
+		}
+		return false;
+	}
+	
+	private void saveDebit(Debit debit) throws ServiceException {
 		try {
 			dataBase.addPayment(debit.getContractNumber(), debit.getTotalDebit());
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
 	}
-	
 
 	private void saveCredit(Credit credit) throws ServiceException {
 		try {
@@ -89,11 +130,5 @@ public abstract class CreditAbstract implements ICreditLogic {
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
-	}
-	
-	private BigDecimal setNewTotalDebit(Credit credit, Debit debit) {
-		BigDecimal currentDebit = debit.getCurrentDebit().subtract(debit.getPercent()).setScale(2, RoundingMode.HALF_UP);
-		BigDecimal newTotalDebet = currentDebit.add(credit.getTotalDebit());
-		return newTotalDebet;
 	}
 }

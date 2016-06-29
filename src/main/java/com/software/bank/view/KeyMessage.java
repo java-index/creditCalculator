@@ -30,7 +30,13 @@ public enum KeyMessage {
 	
 	CONTRACT_NOT_FOUND("msg.contract.notfound"),
 	
-	PAYMENT_SCHEDULE("msg.payment.schedule");
+	PAYMENT_SCHEDULE("msg.payment.schedule"),
+	
+	CONTRACT_CLOSED("msg.contract.closed"),
+	
+	CONTRACT_EXIST("msg.contract.exist"),
+	
+	INPUT_LESS_THAN_VALUE("msg.input.error.less");
 	
 	private String key;
 

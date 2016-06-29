@@ -18,8 +18,13 @@ public class DecliningBalance extends CreditAbstract {
 		int monthInYear = 12;
 		int scale = 4;
 		
-		BigDecimal baseCredit = credit.getTotalCredit().divide(new BigDecimal(credit.getTerm()), scale, RoundingMode.HALF_UP);
-			
+		BigDecimal baseCredit = credit.getTotalCredit()
+				.divide(new BigDecimal(credit.getTerm()), 2, RoundingMode.HALF_UP);
+
+		if (credit.getTerm()  - credit.getQtyPayments() == 1){ // last payment, correct cents
+			baseCredit = credit.getTotalCredit().subtract(credit.getTotalDebit()); 
+		}
+
 		// creditRemainder * ( rate/12/100)
 		BigDecimal percent = credit.getTotalCredit().subtract(credit.getTotalDebit())
 				.multiply(credit.getRate().divide(new BigDecimal(monthInYear), scale, RoundingMode.HALF_UP)
@@ -39,9 +44,12 @@ public class DecliningBalance extends CreditAbstract {
 		String [] schedule = new String[term];
 		for(int i = 0; i< schedule.length; i++){
 			Debit debit = getMinPayment(credit);
-			schedule [i] = getMinPayment(credit).getMinDebit().toString();
-			credit.setTotalDebit(credit.getTotalDebit().add(debit.getMinDebit()));
-		}
+			schedule [i] = debit.getMinDebit().setScale(2, RoundingMode.HALF_UP).toString();
+			credit.setTotalDebit(credit.getTotalDebit()
+					.add(debit.getMinDebit())
+					.subtract(debit.getPercent()));
+			credit.setQtyPayments(i+1);
+			}
 		return schedule;
 	}
 }
