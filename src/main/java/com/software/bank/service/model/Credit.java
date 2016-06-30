@@ -2,6 +2,8 @@ package com.software.bank.service.model;
 
 import java.math.BigDecimal;
 
+import com.software.bank.service.Repayment;
+
 public class Credit {
 	
 	private String contractNumber;
@@ -10,12 +12,42 @@ public class Credit {
 	
 	private BigDecimal totalDebit;
 	
+	private BigDecimal minRequiredDebit;
+	
+	private BigDecimal percent;
+		
 	private int term;
 	
 	private BigDecimal rate;
 	
 	private int qtyPayments; 
 	
+	private Repayment type;
+	
+	public BigDecimal getPercent() {
+		return percent;
+	}
+
+	public void setPercent(BigDecimal percent) {
+		this.percent = percent;
+	}
+
+	public BigDecimal getMinRequiredDebit() {
+		return minRequiredDebit;
+	}
+
+	public void setMinRequiredDebit(BigDecimal minRequiredDebit) {
+		this.minRequiredDebit = minRequiredDebit;
+	}
+
+	public Repayment getRepayment() {
+		return type;
+	}
+
+	public void setRepayment(Repayment type) {
+		this.type = type;
+	}
+
 	public int getQtyPayments() {
 		return qtyPayments;
 	}

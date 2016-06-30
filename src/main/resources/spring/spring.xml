@@ -10,35 +10,57 @@
 	<bean id="consoleInput" class="com.software.bank.view.input.ReadConsole" />
 	
 	<!-- Russian -->
+	
+	<bean id="resource_RU" class="java.util.ResourceBundle" factory-method="getBundle">
+  		<constructor-arg value="messages_RU"/>
+	</bean>
+	
 	<bean id="RU" class="com.software.bank.view.VisualRus" >
 		<property name="input" ref="consoleInput" />
+		<property name="resourceBundle" ref="resource_RU" />
 	</bean>
 	
 	<!-- Ukrainan -->
+	
+	<bean id="resource_UA" class="java.util.ResourceBundle" factory-method="getBundle">
+  		<constructor-arg value="messages_UA"/>
+	</bean>
+	
 	<bean id="UA" class="com.software.bank.view.VisualUkr" >
 		<property name="input" ref="consoleInput" />
+		<property name="resourceBundle" ref="resource_UA" />
 	</bean>
 	
 	<!-- English -->
+	
+	<bean id="resource_EN" class="java.util.ResourceBundle" factory-method="getBundle">
+  		<constructor-arg value="messages_EN"/>
+  	</bean>
+	
 	<bean id="EN" class="com.software.bank.view.VisualEng" >
 		<property name="input" ref="consoleInput" />
-	</bean>
-	
-	<bean id="annuity" class="com.software.bank.service.Annuity" >
-		<property name="view" ref="RU" />
-		<property name="dataBase" ref="h2db" />
+		<property name="resourceBundle" ref="resource_EN" />
 	</bean>
 
-	<bean id="decliningBalance" class="com.software.bank.service.DecliningBalance" >
-		<property name="view" ref="RU" />
-		<property name="dataBase" ref="h2db" />
+	<bean id="viewManager" class="com.software.bank.view.ViewManager">
+		<property name="en" ref="EN" />
+		<property name="ua" ref="UA" />
+		<property name="ru" ref="RU" />
+		<property name="def" ref="EN" />
 	</bean>
 	
-	<bean id="creditAnnuity" class="com.software.bank.controller.CreditController">
-		<property name="creditLogic" ref="annuity" />
+	<!-- LANGAUGE END -->
+	
+	<!-- LOGIC -->
+		
+	<bean id="annuity" class="com.software.bank.service.Annuity" />
+	
+	<bean id="declining" class="com.software.bank.service.DecliningBalance" />
+	
+	<bean id="logicManager" class="com.software.bank.service.CreditLogicManager">
+		<property name="annuity" ref="annuity" />
+		<property name="declining" ref="declining" />
+		<property name="def" ref="annuity" />
 	</bean>
 	
-	<bean id="creditDecliningBalance" class="com.software.bank.controller.CreditController">
-		<property name="creditLogic" ref="decliningBalance" />
-	</bean>
 </beans>

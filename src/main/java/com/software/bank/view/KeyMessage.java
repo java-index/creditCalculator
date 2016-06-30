@@ -18,6 +18,8 @@ public enum KeyMessage {
 	
 	ENTER_TERM("msg.add.term"),
 	
+	ENTER_REPAYMENT("msg.select.repayment"),
+	
 	MIN_PAYMENT("msg.min.payment"),
 	
 	SUCCESS("msg.success"),

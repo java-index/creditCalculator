@@ -5,12 +5,13 @@ import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
+import com.software.bank.service.Repayment;
 import com.software.bank.service.model.Credit;
 import com.software.bank.view.input.ReadConsole;
 
 public abstract class VisualAbstract implements IVisual {
 
-	protected ResourceBundle resourceBundle;
+	private ResourceBundle resourceBundle;
 	
 	private ReadConsole input;
 
@@ -21,16 +22,51 @@ public abstract class VisualAbstract implements IVisual {
 	public void setInput(ReadConsole input) {
 		this.input = input;
 	}
+	
+	public ResourceBundle getResourceBundle() {
+		return resourceBundle;
+	}
+
+	public void setResourceBundle(ResourceBundle resourceBundle) {
+		this.resourceBundle = resourceBundle;
+	}
 
 	@Override
-	public String operationChoiceMenuView() {
-		printMessage(KeyMessage.SELECT_OPERATION);
-		String choice = input.read();
-		return choice;
+	public void setView(IVisual newView) {
 	}
 	
 	@Override
-	public Credit addCreditMenuView() {
+	public String operationChoiceMenu() {
+		printMessage(KeyMessage.SELECT_OPERATION);
+		String choice = input.read();
+		switch (choice) {
+		case "1":
+			return "CREDIT";
+		case "2":
+			return "DEBIT";
+		default:
+			return "EXIT";
+		}
+	}
+	
+	@Override
+	public String languageChoiceMenu() {
+		printMessage(KeyMessage.SELECT_LANGUAGE);
+		String choice = input.read();
+		switch (choice) {
+		case "1":
+			return "EN";
+		case "2":
+			return "UA";
+		case "3":
+			return "RU";
+		default:
+			return "CONTINUE";
+		}
+	}
+	
+	@Override
+	public Credit addCreditMenu() {
 		Credit credit = new Credit();
 		
 		printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
@@ -47,11 +83,23 @@ public abstract class VisualAbstract implements IVisual {
 		printMessage(KeyMessage.ENTER_TERM);
 		credit.setTerm(readInt());
 		
+		printMessage(KeyMessage.ENTER_REPAYMENT);
+		int input = readInt(1, 2);
+		
+		switch (input) {
+		case 1:
+			credit.setRepayment(Repayment.ANNUITY);
+			break;
+		case 2:
+			credit.setRepayment(Repayment.DECLINING);
+			break;
+		}
+		
 		return credit;
 	}
 	
 	@Override
-	public void showPaymentSchedule(String[] paymentSchedule) {
+	public void paymentSchedule(String[] paymentSchedule) {
 		printMessage(KeyMessage.PAYMENT_SCHEDULE);
 		print("--------------------");
 		for(int i = 0; i < paymentSchedule.length; i++){
@@ -60,13 +108,13 @@ public abstract class VisualAbstract implements IVisual {
 	}
 
 	@Override
-	public String addPaymentContractView() {
+	public String enterContractNumber() {
 		printMessage(KeyMessage.ENTER_CONTRACT_NUMBER);
 		return input.read();
 	}
 	
 	@Override
-	public BigDecimal addPaymentSummaView(String minDebit){
+	public BigDecimal enterDebit(String minDebit){
 		printMessage(KeyMessage.MIN_PAYMENT);
 		printMessage(minDebit);
 		printMessage(KeyMessage.ENTER_PAYMENT);
@@ -75,27 +123,27 @@ public abstract class VisualAbstract implements IVisual {
 	}
 	
 	@Override
-	public void showContractNotFound() {
+	public void contractNotFound() {
 		printMessage(KeyMessage.CONTRACT_NOT_FOUND);
 	}
 	
 	@Override
-	public void showContractClosed() {
+	public void contractClosed() {
 		printMessage(KeyMessage.CONTRACT_CLOSED);
 	}
 	
 	@Override
-	public void showInternalError() {
+	public void internalError() {
 		printMessage(KeyMessage.INTERNAL_ERROR);
 	}
 	
 	@Override
-	public void showContractIsExist() {
+	public void contractIsExist() {
 		printMessage(KeyMessage.CONTRACT_EXIST);
 	}
 	
 	@Override
-	public void showSuccess() {
+	public void success() {
 		print("------------------");
 		printMessage(KeyMessage.SUCCESS);
 		print("------------------");
@@ -153,6 +201,23 @@ public abstract class VisualAbstract implements IVisual {
 			try{
 				value = input.readInt();
 				if (value < 0){
+					throw new IllegalArgumentException();
+				}
+				break;
+			} catch (IllegalArgumentException | NoSuchElementException e) {
+				printMessage(KeyMessage.INPUT_PARAMETR_ERROR);
+				continue;
+			}
+		}
+		return value;
+	}
+	
+	private int readInt(int min, int max){
+		int value = 0;
+		while (true){
+			try{
+				value = input.readInt();
+				if (value < min || value > max){
 					throw new IllegalArgumentException();
 				}
 				break;

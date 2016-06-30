@@ -1,14 +1,22 @@
 package com.software.bank.service;
 
+import com.software.bank.dao.IDataBase;
+import com.software.bank.dao.h2.CreditDataBaseDao;
 import com.software.bank.service.exception.ServiceException;
+import com.software.bank.service.model.Credit;
 import com.software.bank.view.IVisual;
+import com.software.bank.view.VisualGeneral;
 
 public interface ICreditLogic {
 	
-	IVisual getView();
+	IVisual view = new VisualGeneral();
 	
-	void addCredit() throws ServiceException;
+	IDataBase dataBase = new CreditDataBaseDao();
 	
-	void addDebit() throws ServiceException;
-
+	String [] addCredit(Credit credit) throws ServiceException;
+	
+	Credit getCredit(String contractNumber) throws ServiceException;
+	
+	void addDebit(Credit credit) throws ServiceException;
+	
 }

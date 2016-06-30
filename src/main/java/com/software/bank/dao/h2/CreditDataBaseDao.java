@@ -10,13 +10,14 @@ import java.sql.Statement;
 import com.software.bank.dao.ConnectionFactory;
 import com.software.bank.dao.IDataBase;
 import com.software.bank.dao.exception.DaoException;
+import com.software.bank.service.Repayment;
 import com.software.bank.service.model.Credit;
 
 public class CreditDataBaseDao implements IDataBase {
 	
 	private static final String CREATE_QUERY = 
 			"CREATE TABLE credit (contract_number VARCHAR(60), "
-			+ "total_credit DECIMAL, total_debet DECIMAL, term INT, rate DECIMAL, qty_payments INT)";
+			+ "total_credit DECIMAL, total_debet DECIMAL, term INT, rate DECIMAL, qty_payments INT, repayment VARCHAR(10))";
 	// Create table
 	static {
 		try {
@@ -30,8 +31,8 @@ public class CreditDataBaseDao implements IDataBase {
 
 	@Override
 	public void addCredit(Credit credit) throws DaoException {
-		final String querySql = "INSERT INTO credit (contract_number, total_credit, total_debet, term, rate, qty_payments) "
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		final String querySql = "INSERT INTO credit (contract_number, total_credit, total_debet, term, rate, qty_payments, repayment) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try(Connection connection = ConnectionFactory.getConnection()) {								
 			try (PreparedStatement statement = connection.prepareStatement(querySql)){
 				int i = 1;
@@ -41,6 +42,7 @@ public class CreditDataBaseDao implements IDataBase {
 				statement.setInt(i++, credit.getTerm());
 				statement.setBigDecimal(i++, credit.getRate());
 				statement.setInt(i++, 0);
+				statement.setString(i++, credit.getRepayment().toString());
 				statement.executeUpdate();
 			} 
 		} catch (SQLException e){
@@ -79,6 +81,7 @@ public class CreditDataBaseDao implements IDataBase {
 					credit.setTerm(rs.getInt("term"));
 					credit.setRate(rs.getBigDecimal("rate"));
 					credit.setQtyPayments(rs.getInt("qty_payments"));
+					credit.setRepayment(Repayment.valueOf(rs.getString("repayment")));
 				}
 				rs.close();
 			} 

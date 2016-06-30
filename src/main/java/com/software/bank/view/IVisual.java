@@ -6,27 +6,29 @@ import com.software.bank.service.model.Credit;
 
 public interface IVisual {
 
-	//void printMessage(KeyMessage key);
+	String languageChoiceMenu(); 
 	
-	String operationChoiceMenuView(); 
+	String operationChoiceMenu(); 
 	
-	Credit addCreditMenuView(); 
+	Credit addCreditMenu(); 
 		
-	String addPaymentContractView();
+	String enterContractNumber();
 	
-	void showPaymentSchedule(String [] paymentSchedule);
+	void paymentSchedule(String [] paymentSchedule);
 	
-	BigDecimal addPaymentSummaView(String minDebit);
+	BigDecimal enterDebit(String minDebit);
 	
-	void showContractClosed();
+	void contractClosed();
 	
-	void showContractNotFound(); 
+	void contractNotFound(); 
 	
-	void showContractIsExist(); 
+	void contractIsExist(); 
 	
-	void showInternalError(); 
+	void internalError(); 
 	
-	void showSuccess();
+	void success();
 	
 	void bye();
+	
+	void setView(IVisual newView);
 }

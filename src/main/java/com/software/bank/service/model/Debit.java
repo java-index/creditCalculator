@@ -4,23 +4,9 @@ import java.math.BigDecimal;
 
 public class Debit {
 	
-	private String contractNumber;
-	
 	private BigDecimal percent;
 	
-	private BigDecimal minDebit;
-
-	private BigDecimal currentDebit;
-
-	private BigDecimal totalDebit;
-
-	public String getContractNumber() {
-		return contractNumber;
-	}
-
-	public void setContractNumber(String contractNumber) {
-		this.contractNumber = contractNumber;
-	}
+	private BigDecimal minRequiredDebit;
 
 	public BigDecimal getPercent() {
 		return percent;
@@ -30,27 +16,11 @@ public class Debit {
 		this.percent = percent;
 	}
 
-	public BigDecimal getMinDebit() {
-		return minDebit;
+	public BigDecimal getMinRequiredDebit() {
+		return minRequiredDebit;
 	}
 
-	public void setMinDebit(BigDecimal minDebit) {
-		this.minDebit = minDebit;
-	}
-
-	public BigDecimal getCurrentDebit() {
-		return currentDebit;
-	}
-
-	public void setCurrentDebit(BigDecimal currentDebit) {
-		this.currentDebit = currentDebit;
-	}
-
-	public BigDecimal getTotalDebit() {
-		return totalDebit;
-	}
-
-	public void setTotalDebit(BigDecimal totalDebit) {
-		this.totalDebit = totalDebit;
+	public void setMinRequiredDebit(BigDecimal minRequiredDebit) {
+		this.minRequiredDebit = minRequiredDebit;
 	}
 }

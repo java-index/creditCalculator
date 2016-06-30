@@ -9,16 +9,14 @@ import com.software.bank.service.model.Debit;
 public class Annuity extends CreditAbstract {
 	
 	@Override
-	protected Debit getMinPayment(Credit credit) {
+	protected Debit calculateMinDebit(Credit credit) {
 		// X (min payment) = S * K 
 		// K - factor of annuity p *  ((1 + p)^n / (1+P)^n - 1)
 		// S - credit total
 		// p - rate/12/100
 		// n - term (month)
-		
-		Debit minDebit = new Debit();
+		Debit debit = new Debit();
 		int scale = 10;
-		
 		BigDecimal rate = credit.getRate();
 		BigDecimal partRate = rate.divide(BigDecimal.valueOf(1200L), scale, RoundingMode.HALF_UP);
 
@@ -30,23 +28,20 @@ public class Annuity extends CreditAbstract {
 		quotient = quotient.pow(credit.getTerm());
 		quotient = partRate.multiply(quotient);
 
-		BigDecimal minDebetPayment = credit.getTotalCredit().multiply(quotient.divide(didvident, RoundingMode.HALF_UP));
-		minDebetPayment = minDebetPayment.setScale(2, RoundingMode.HALF_UP);
+		BigDecimal minRequiredDebit = credit.getTotalCredit().multiply(quotient.divide(didvident, RoundingMode.HALF_UP));
+		minRequiredDebit = minRequiredDebit.setScale(2, RoundingMode.HALF_UP);
 		
-		minDebit.setMinDebit(minDebetPayment);
-		minDebit.setTotalDebit(credit.getTotalDebit());
-		minDebit.setPercent(new BigDecimal(0));
-		minDebit.setContractNumber(credit.getContractNumber());
-		
-		return minDebit;
+		debit.setMinRequiredDebit(minRequiredDebit);
+		debit.setPercent(new BigDecimal(0));
+		return debit;
 	}
 	
 	protected String [] createPaymentSchedule(Credit credit){
 		int term = credit.getTerm();
 		String [] schedule = new String[term];
-		String minDebit =  getMinPayment(credit).getMinDebit().toString();
+		String minRequiredDebit = calculateMinDebit(credit).getMinRequiredDebit().toString();
 		for(int i = 0; i< schedule.length; i++){
-			schedule[i] = minDebit;
+			schedule[i] = minRequiredDebit;
 		}
 		return schedule;
 	}
