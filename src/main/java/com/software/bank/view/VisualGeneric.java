@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.software.bank.service.model.Credit;
 
-public class VisualGeneral implements IVisual {
+public class VisualGeneric implements IVisual {
 
 	private IVisual view;
 	

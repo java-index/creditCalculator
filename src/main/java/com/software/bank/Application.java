@@ -27,8 +27,7 @@ public class Application {
 	}
 
 	private void addCreditProcess(CreditLogicManager logicManager) throws ServiceException {
-		Credit credit = ICreditLogic.view.addCreditMenu(); // get credit data
-															// from user
+		Credit credit = ICreditLogic.view.addCreditMenu(); // get credit data from user
 		ICreditLogic creditLogic = getCreditLogic(credit, logicManager);
 		boolean contractExist = isContractExist(credit.getContractNumber(), creditLogic);
 		if (contractExist) {
@@ -63,7 +62,8 @@ public class Application {
 	}
 
 	public void setDefaultView(ViewManager viewSwitch) {
-		setView(viewSwitch.defaultView());
+		IVisual defaultView = viewSwitch.defaultView();
+		setView(defaultView);
 	}
 
 	private void setView(IVisual view) {

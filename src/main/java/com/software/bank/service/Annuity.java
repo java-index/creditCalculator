@@ -10,16 +10,17 @@ public class Annuity extends CreditAbstract {
 	
 	@Override
 	protected Debit calculateMinDebit(Credit credit) {
-		// X (min payment) = S * K 
-		// K - factor of annuity p *  ((1 + p)^n / (1+P)^n - 1)
-		// S - credit total
-		// p - rate/12/100
-		// n - term (month)
+		// minRequiredDebit = total credit * K 
+		// K - factor of annuity = P * ((1+P)^N / (1+P)^N - 1)
+		// P - rate/12/100
+		// N - term (month)
+		
 		Debit debit = new Debit();
 		int scale = 10;
 		BigDecimal rate = credit.getRate();
+		// rate/12/100
 		BigDecimal partRate = rate.divide(BigDecimal.valueOf(1200L), scale, RoundingMode.HALF_UP);
-
+		
 		BigDecimal didvident = partRate.add(new BigDecimal(1));
 		didvident = didvident.pow(credit.getTerm());
 		didvident = didvident.subtract(new BigDecimal(1));
@@ -27,7 +28,7 @@ public class Annuity extends CreditAbstract {
 		BigDecimal quotient = partRate.add(new BigDecimal(1));
 		quotient = quotient.pow(credit.getTerm());
 		quotient = partRate.multiply(quotient);
-
+		// total credit * K 
 		BigDecimal minRequiredDebit = credit.getTotalCredit().multiply(quotient.divide(didvident, RoundingMode.HALF_UP));
 		minRequiredDebit = minRequiredDebit.setScale(2, RoundingMode.HALF_UP);
 		

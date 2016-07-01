@@ -61,7 +61,7 @@ public abstract class VisualAbstract implements IVisual {
 		case "3":
 			return "RU";
 		default:
-			return "CONTINUE";
+			return "EXIT";
 		}
 	}
 	

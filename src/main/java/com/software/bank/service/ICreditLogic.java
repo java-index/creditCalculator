@@ -5,11 +5,11 @@ import com.software.bank.dao.h2.CreditDataBaseDao;
 import com.software.bank.service.exception.ServiceException;
 import com.software.bank.service.model.Credit;
 import com.software.bank.view.IVisual;
-import com.software.bank.view.VisualGeneral;
+import com.software.bank.view.VisualGeneric;
 
 public interface ICreditLogic {
 	
-	IVisual view = new VisualGeneral();
+	IVisual view = new VisualGeneric();
 	
 	IDataBase dataBase = new CreditDataBaseDao();
 	

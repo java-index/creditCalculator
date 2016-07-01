@@ -9,17 +9,17 @@ import com.software.bank.service.model.Debit;
 public class DecliningBalance extends CreditAbstract {
 
 	protected Debit calculateMinDebit(Credit credit) {
-		// baseDebit = credit/term
-		// profit = creditRemainder * ( rate/12/100)
-		// current debit = baseDebit + percent;
+		// base debit = credit/term
+		// percent = creditRemainder * ( rate/12/100)
+		// current debit = baseDebit + percent
 
 		Debit debit = new Debit();
-		
 		int monthInYear = 12;
 		int scale = 4;
 		
 		BigDecimal baseCredit = credit.getTotalCredit().divide(new BigDecimal(credit.getTerm()), 2, RoundingMode.HALF_UP);
-		if (credit.getTerm()  - credit.getQtyPayments() == 1){ // last payment, correct cents
+		// if last payment, correct cents
+		if (credit.getTerm()  - credit.getQtyPayments() == 1){
 			baseCredit = credit.getTotalCredit().subtract(credit.getTotalDebit()); 
 		}
 		// creditRemainder * ( rate/12/100)
